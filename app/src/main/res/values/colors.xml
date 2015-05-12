@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    #fed12a    노랑색들
+    #191919    제목
+    #998675    부제목
+    #676565    바, 버튼
+    #ffffff    menu 글씨
+    #525151    상태바
+    #eeeeee    백그라운드 연회색
+    -->
+
+    <color name="theme_primary">#fed12a</color>
+    <color name="text_title">#191919</color>
+    <color name="text_subtitle">#998675</color>
+    <color name="button">#676565</color>
+    <color name="text_menu">#ffffff</color>
+    <color name="status_bar">#525151</color>
+    <color name="background_gray">#eeeeee</color>
+    
+</resources>
