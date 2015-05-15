@@ -25,4 +25,5 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.15'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
     compile 'com.sothree.slidinguppanel:library:3.0.0' // https://github.com/umano/AndroidSlidingUpPanel
+    compile 'com.google.code.gson:gson:2.3'
 }
