@@ -7,7 +7,7 @@ import co.cheez.cheez.R;
  */
 public class ContentViewFragment extends BaseFragment {
     @Override
-    protected int getLayoutRes() {
+    public int getLayoutResourceId() {
         return R.layout.fragment_content_view;
     }
 }

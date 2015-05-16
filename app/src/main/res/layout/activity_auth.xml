@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="co.cheez.cheez.activity.AuthActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <android.support.v4.view.ViewPager  android:id="@+id/pager"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        >
+        <Button
+            android:id="@+id/btn_fb_login"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="@dimen/btn_size_normal"
+            android:layout_height="@dimen/btn_size_normal"
+            android:text="f"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/btn_skip_login"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="@dimen/btn_size_normal"
+            android:layout_height="@dimen/btn_size_normal"
+            android:text="skip"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

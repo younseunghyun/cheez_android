@@ -4,7 +4,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -23,11 +22,11 @@ public class Post {
 
     private User user;
 
-    public static Post fromJsonObject(JSONObject object) throws JSONException {
+    public static Post fromJsonObject(JSONObject object) {
         return fromJsonString(object.toString());
     }
 
-    public static Post fromJsonString(String jsonString) throws JSONException {
+    public static Post fromJsonString(String jsonString) {
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();

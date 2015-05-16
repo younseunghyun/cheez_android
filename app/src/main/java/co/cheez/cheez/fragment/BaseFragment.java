@@ -7,26 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import co.cheez.cheez.automation.view.HasLayout;
 import co.cheez.cheez.automation.view.ViewMapper;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements HasLayout {
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return getContentView(getActivity(), getLayoutRes());
+        return getContentView(getActivity(), getLayoutResourceId());
     }
-
-    /**
-     *
-     * @return Layout resource id
-     */
-    protected abstract int getLayoutRes();
 
     protected View getContentView(Context context, int layoutResId) {
         return ViewMapper.inflateLayout(context, this, layoutResId);

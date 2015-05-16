@@ -4,7 +4,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -16,11 +15,11 @@ public class User {
     private String name;
     private String imageUrl;
 
-    public static User fromJsonObject(JSONObject object) throws JSONException {
+    public static User fromJsonObject(JSONObject object) {
         return fromJsonString(object.toString());
     }
 
-    public static User fromJsonString(String jsonString) throws JSONException {
+    public static User fromJsonString(String jsonString) {
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
