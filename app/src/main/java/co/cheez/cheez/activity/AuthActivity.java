@@ -1,5 +1,6 @@
 package co.cheez.cheez.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,11 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Locale;
 
+import co.cheez.cheez.App;
 import co.cheez.cheez.R;
+import co.cheez.cheez.auth.Auth;
 import co.cheez.cheez.automation.view.DeclareView;
 import co.cheez.cheez.automation.view.ViewMapper;
+import co.cheez.cheez.http.listener.DefaultErrorListener;
+import co.cheez.cheez.http.listener.DefaultListener;
+import co.cheez.cheez.util.Constants;
+import co.cheez.cheez.util.DeviceUtil;
+import co.cheez.cheez.util.MessageUtil;
 
 public class AuthActivity extends BaseActivity implements View.OnClickListener {
 
@@ -47,10 +63,93 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_skip_login:
+                try {
+                    JSONArray devices = new JSONArray()
+                            .put(DeviceUtil.getDeviceInfo());
+                    JSONObject params = new JSONObject()
+                            .put(Constants.Keys.DEVICES, devices);
+                    sendSignupRequest(params);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    MessageUtil.showDefaultErrorMessage();
+                }
 
                 break;
         }
     }
+
+    private void sendSignupRequest(JSONObject params) {
+        Request request = new JsonObjectRequest(
+                Request.Method.POST,
+                Constants.URLs.USER,
+                params,
+                new DefaultListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        super.onResponse(response);
+                        try {
+                            JSONObject params = new JSONObject()
+                                    .put(Constants.Keys.DEVICE, DeviceUtil.getDeviceInfo());
+                            sendAuthTokenRequest(params);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            MessageUtil.showMessage(R.string.error_default);
+                        }
+                        hideProgressDialog();
+                    }
+                },
+                new DefaultErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        super.onErrorResponse(error);
+                        // TODO : device 중복으로 인한 에러인 경우 그냥 token 요청
+                        hideProgressDialog();
+                    }
+                }
+        );
+        showProgressDialog();
+        App.getRequestQueue().add(request);
+    }
+
+    private void sendAuthTokenRequest(JSONObject params) {
+        Request request = new JsonObjectRequest(
+                Request.Method.POST,
+                Constants.URLs.AUTH_TOKEN,
+                params,
+                new DefaultListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        super.onResponse(response);
+                        hideProgressDialog();
+                        try {
+                            String token = response.getString(Constants.Keys.TOKEN);
+                            Auth.getInstance().setAuthToken(token);
+                            Intent intent = BaseActivity.getIntent(
+                                    AuthActivity.this,
+                                    ContentViewActivity.class,
+                                    null,
+                                    Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                    );
+                            startActivity(intent);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            MessageUtil.showDefaultErrorMessage();
+                        }
+                    }
+                },
+                new DefaultErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        super.onErrorResponse(error);
+                        hideProgressDialog();
+                    }
+                }
+        );
+        showProgressDialog();
+        App.getRequestQueue().add(request);
+    }
+
 
 
     /**

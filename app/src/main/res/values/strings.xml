@@ -8,4 +8,6 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="title_activity_auth">AuthActivity</string>
+    <string name="error_default">오류가 발생했습니다. 잠시 후에 다시 시도해주세요.</string>
+    <string name="message_progress_default">잠시만 기다려주세요</string>
 </resources>

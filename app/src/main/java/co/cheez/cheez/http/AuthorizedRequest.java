@@ -1,7 +1,6 @@
 package co.cheez.cheez.http;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
@@ -10,6 +9,7 @@ import java.util.Map;
 
 import co.cheez.cheez.auth.Auth;
 import co.cheez.cheez.http.listener.DefaultErrorListener;
+import co.cheez.cheez.http.listener.DefaultListener;
 
 /**
  * Created by jiho on 5/16/15.
@@ -19,7 +19,7 @@ public class AuthorizedRequest extends JsonObjectRequest {
     public AuthorizedRequest(int method,
                              String url,
                              JSONObject jsonRequest,
-                             Response.Listener<JSONObject> listener,
+                             DefaultListener listener,
                              DefaultErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
     }

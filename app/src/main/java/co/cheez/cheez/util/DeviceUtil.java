@@ -3,6 +3,7 @@ package co.cheez.cheez.util;
 import android.os.Build;
 import android.provider.Settings;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import co.cheez.cheez.App;
@@ -22,8 +23,21 @@ public class DeviceUtil {
         return Build.VERSION.RELEASE;
     }
 
-    public static JSONObject getDeviceInfo() {
-        JSONObject deviceInfo = new JSONObject()
-                .put()
+    public static JSONObject getDeviceInfo() throws JSONException {
+        /*
+        '/user/',
+            {
+                "devices": [{
+                    "device_id": "unique_device_id",
+                    "os_type": 1,
+                }]
+            },
+         */
+        return new JSONObject()
+                .put(Constants.Keys.DEVICE_ID, getDeviceId())
+                .put(Constants.Keys.OS_TYPE, Constants.Integers.OS_TYPE_ANDROID)
+                .put(Constants.Keys.OS_VERSION, getOSVersion());
+
+
     }
 }

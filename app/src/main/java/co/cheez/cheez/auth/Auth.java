@@ -15,6 +15,7 @@ public class Auth {
     private static final String KEY_AUTH_TOKEN = "auth_token";
     private static final String KEY_USER = "user";
 
+    private SharedPreferences mAuthPreference;
     private String mAuthToken;
     private User mUser;
 
@@ -27,10 +28,10 @@ public class Auth {
     }
 
     private void loadDataFromPreference() {
-        SharedPreferences sharedPreferences = App.getContext()
+        mAuthPreference = App.getContext()
                 .getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
-        mAuthToken = sharedPreferences.getString(KEY_AUTH_TOKEN, null);
-        String userDataString = sharedPreferences.getString(KEY_USER, null);
+        mAuthToken = mAuthPreference.getString(KEY_AUTH_TOKEN, null);
+        String userDataString = mAuthPreference.getString(KEY_USER, null);
         if (userDataString != null) {
             mUser = User.fromJsonString(userDataString);
         }
@@ -44,4 +45,23 @@ public class Auth {
         return mAuthToken;
     }
 
+    public void setAuthToken(String authToken) {
+        this.mAuthToken = authToken;
+        mAuthPreference
+                .edit()
+                .putString(KEY_AUTH_TOKEN, authToken)
+                .apply();
+    }
+
+    public User getUser() {
+        return mUser;
+    }
+
+    public void setUser(User user) {
+        this.mUser = user;
+        mAuthPreference
+                .edit()
+                .putString(KEY_USER, user.toJsonString())
+                .apply();
+    }
 }

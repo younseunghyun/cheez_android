@@ -3,7 +3,7 @@
     package="co.cheez.cheez" >
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="ANDROID.PERMISSION.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".App"
