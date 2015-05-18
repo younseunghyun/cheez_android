@@ -24,6 +24,10 @@
             android:name=".activity.AuthActivity"
             android:label="@string/title_activity_auth" >
         </activity>
+        <activity
+            android:name=".activity.ContentUploadActivity"
+            android:label="@string/title_activity_content_upload" >
+        </activity>
     </application>
 
 </manifest>

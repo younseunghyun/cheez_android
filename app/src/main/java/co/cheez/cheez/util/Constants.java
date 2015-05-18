@@ -20,6 +20,7 @@ public interface Constants {
 
     interface URLs {
         String BASE = "https://api.cheez.co/";
+        String POST = BASE + "post/";
         String USER = BASE + "user/";
         String AUTH_TOKEN = BASE + "api-auth-token/";
     }

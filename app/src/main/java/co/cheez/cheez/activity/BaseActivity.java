@@ -6,11 +6,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
+import java.util.HashSet;
+import java.util.Iterator;
+
 import co.cheez.cheez.R;
+import co.cheez.cheez.automation.lifecycle.LifecycleObservable;
+import co.cheez.cheez.automation.lifecycle.LifecycleObserver;
 
 
-public abstract class BaseActivity extends ActionBarActivity {
+public abstract class BaseActivity extends ActionBarActivity
+        implements LifecycleObservable {
     protected ProgressDialog mProgressDialog;
+    protected HashSet<LifecycleObserver> mLifecycleObservers;
+
+    public BaseActivity() {
+        super();
+        mLifecycleObservers = new HashSet<>();
+    }
 
     public static Intent getIntent(Context context, Class cls, Bundle args) {
         Intent intent = new Intent(context, cls);
@@ -26,6 +38,12 @@ public abstract class BaseActivity extends ActionBarActivity {
         intent.addFlags(flags);
 
         return intent;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
     }
 
     protected void showProgressDialog() {
@@ -57,4 +75,29 @@ public abstract class BaseActivity extends ActionBarActivity {
         }
     }
 
+    public void addObserver(LifecycleObserver observer) {
+        mLifecycleObservers.add(observer);
+    }
+
+    public void removeObserver(LifecycleObserver observer) {
+        mLifecycleObservers.remove(observer);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Iterator<LifecycleObserver> iterator = mLifecycleObservers.iterator();
+        while(iterator.hasNext()) {
+            iterator.next().onResume();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        Iterator<LifecycleObserver> iterator = mLifecycleObservers.iterator();
+        while(iterator.hasNext()) {
+            iterator.next().onPause();
+        }
+        super.onPause();
+    }
 }

@@ -5,6 +5,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import co.cheez.cheez.auth.Auth;
@@ -26,11 +27,13 @@ public class AuthorizedRequest extends JsonObjectRequest {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        Map<String, String> headers = super.getHeaders();
+        HashMap<String, String> headers = new HashMap<>();
+        headers.putAll(super.getHeaders());
+
         String authToken = Auth.getInstance().getAuthToken();
         if (authToken != null) {
             headers.put("Authorization", "Token "+authToken);
         }
-        return super.getHeaders();
+        return headers;
     }
 }
