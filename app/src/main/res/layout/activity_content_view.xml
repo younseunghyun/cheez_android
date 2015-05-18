@@ -16,4 +16,9 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/splash"/>
+
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
 </RelativeLayout>

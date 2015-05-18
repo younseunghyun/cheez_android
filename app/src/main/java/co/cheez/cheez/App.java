@@ -5,7 +5,13 @@ import android.content.Context;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import java.io.File;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -22,6 +28,9 @@ import javax.net.ssl.X509TrustManager;
  * Created by jiho on 5/10/15.
  */
 public class App extends Application {
+    private static final int MEMORY_CACHE_SIZE = 2 * 1024 * 1024;
+    private static final int DISK_CACHE_SIZE = 50 * 1024 * 1024;
+    private static final int DISK_CACHE_FILE_COUNT = 20;
     private static Context mContext;
     private static RequestQueue mRequestQueue;
 
@@ -34,6 +43,7 @@ public class App extends Application {
 
 
         disableSSLCertificateChecking();
+        initializeImageLoader();
     }
 
     public static Context getContext() {
@@ -83,5 +93,18 @@ public class App extends Application {
 
         // Install the all-trusting host verifier
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+    }
+
+    private void initializeImageLoader() {
+        File cacheDir = StorageUtils.getCacheDirectory(this);
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .denyCacheImageMultipleSizesInMemory()
+                .memoryCache(new LruMemoryCache(MEMORY_CACHE_SIZE))
+                .memoryCacheSize(MEMORY_CACHE_SIZE)
+                .diskCache(new UnlimitedDiscCache(cacheDir))
+                .diskCacheSize(DISK_CACHE_SIZE)
+                .diskCacheFileCount(DISK_CACHE_FILE_COUNT)
+                .build();
+        ImageLoader.getInstance().init(config);
     }
 }

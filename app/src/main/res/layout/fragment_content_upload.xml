@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="co.cheez.cheez.activity.ContentUploadActivityFragment">
+    tools:context="co.cheez.cheez.activity.ContentUploadFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +12,14 @@
             android:id="@+id/et_url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="http://bttrfly.co/picture/642"
             android:hint="url"/>
+        <Button
+            android:id="@+id/btn_request_og"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="og"
+            />
 
         <EditText
             android:id="@+id/et_title"
@@ -33,10 +40,17 @@
             android:hint="tags"/>
 
         <ImageView
-            android:id="@+id/iv_main"
+            android:id="@+id/iv_content_main"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/splash"/>
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="submit"
+            />
 
     </LinearLayout>
 

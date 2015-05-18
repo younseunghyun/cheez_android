@@ -16,6 +16,8 @@ public interface Constants {
         String TOKEN = "token";
         String DEVICE = "device";
         String DEVICES = "devices";
+
+        String URL = "url";
     }
 
     interface URLs {
@@ -23,5 +25,6 @@ public interface Constants {
         String POST = BASE + "post/";
         String USER = BASE + "user/";
         String AUTH_TOKEN = BASE + "api-auth-token/";
+        String OG = BASE + "og/";
     }
 }

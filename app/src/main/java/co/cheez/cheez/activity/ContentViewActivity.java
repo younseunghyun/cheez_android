@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.android.volley.Request;
@@ -31,11 +32,14 @@ public class ContentViewActivity extends BaseActivity {
 
     ContentViewPagerAdapter mSectionsPagerAdapter;
 
-    @DeclareView(id=R.id.pager)
+    @DeclareView(id = R.id.pager)
     ViewPager mViewPager;
 
-    @DeclareView(id=R.id.iv_splash)
+    @DeclareView(id = R.id.iv_splash)
     ImageView mSplashImageView;
+
+    @DeclareView(id = R.id.btn_upload)
+    Button uploadButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,15 @@ public class ContentViewActivity extends BaseActivity {
         addObserver(mSectionsPagerAdapter);
 
         requestPostList();
+
+
+        // 너중에 지우자
+        uploadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(BaseActivity.getIntent(ContentViewActivity.this, ContentUploadActivity.class, null));
+            }
+        });
     }
 
     private void requestPostList() {
