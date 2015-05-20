@@ -64,4 +64,12 @@ public abstract class BaseFragment extends Fragment
         }
         super.onPause();
     }
+
+    /**
+     *
+     * @return event consumed
+     */
+    public boolean onBackPressed() {
+        return false;
+    }
 }

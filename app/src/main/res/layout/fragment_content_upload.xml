@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="co.cheez.cheez.activity.ContentUploadFragment">
+    tools:context="co.cheez.cheez.fragment.ContentUploadFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +12,6 @@
             android:id="@+id/et_url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="http://bttrfly.co/picture/642"
             android:hint="url"/>
         <Button
             android:id="@+id/btn_request_og"

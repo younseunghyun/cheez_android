@@ -10,6 +10,26 @@
         android:layout_height="match_parent"
         />
 
+    <RelativeLayout
+        android:id="@+id/rl_btnset_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height">
+        <ImageButton
+            android:id="@+id/btn_drawer_toggle"
+            android:layout_width="@dimen/btn_size_normal"
+            android:layout_height="@dimen/btn_size_normal"
+            android:src="@drawable/ic_menu_white_24dp"
+            android:background="@null"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:src="@drawable/logo_toolbar"
+
+            />
+    </RelativeLayout>
+
     <ImageView
         android:id="@+id/iv_splash"
         android:layout_width="match_parent"
@@ -20,5 +40,9 @@
     <Button
         android:id="@+id/btn_upload"
         android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        android:visibility="invisible"
+        />
+
+
 </RelativeLayout>

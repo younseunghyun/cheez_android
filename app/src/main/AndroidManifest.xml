@@ -8,7 +8,7 @@
     <application
         android:name=".App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -27,7 +27,16 @@
         <activity
             android:name=".activity.ContentUploadActivity"
             android:label="@string/title_activity_content_upload" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="text/plain" />
+
+            </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

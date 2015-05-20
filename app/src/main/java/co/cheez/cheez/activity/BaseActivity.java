@@ -46,7 +46,7 @@ public abstract class BaseActivity extends ActionBarActivity
 
     }
 
-    protected void showProgressDialog() {
+    public void showProgressDialog() {
         showProgressDialog(false);
     }
 
@@ -68,7 +68,7 @@ public abstract class BaseActivity extends ActionBarActivity
         mProgressDialog.show();
     }
 
-    protected void hideProgressDialog() {
+    public void hideProgressDialog() {
         if (mProgressDialog != null
                 && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();

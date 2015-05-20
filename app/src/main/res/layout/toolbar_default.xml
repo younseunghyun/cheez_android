@@ -1,6 +1,10 @@
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/DefaultToolbarStyle"
     android:id="@+id/toolbar_default"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/toolbar_height"
     android:layout_width="match_parent"
     android:minHeight="?attr/actionBarSize"
-    android:background="?attr/colorPrimary" />
+    android:background="?attr/colorPrimary"
+    android:padding="0dp">
+
+</android.support.v7.widget.Toolbar>

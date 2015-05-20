@@ -17,5 +17,6 @@
     <color name="text_menu">#ffffff</color>
     <color name="status_bar">#525151</color>
     <color name="background_gray">#eeeeee</color>
-    
+    <color name="text_shadow">#ff464646</color>
+
 </resources>

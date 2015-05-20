@@ -3,4 +3,12 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="btn_size_normal">48dp</dimen>
+    <dimen name="umano_panel_height">128dp</dimen>
+    <dimen name="umano_panel_shadow_height">4dp</dimen>
+    <dimen name="umano_panel_handle_padding">16dp</dimen>
+    <dimen name="toolbar_height">48dp</dimen>
+    <dimen name="profile_image_size">64dp</dimen>
+    <dimen name="profile_image_area_margin">16dp</dimen>
+    <dimen name="padding_content_menu">8dp</dimen>
+
 </resources>

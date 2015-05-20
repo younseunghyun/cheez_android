@@ -1,30 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/sliding_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom"
-    sothree:umanoPanelHeight="128dp"
-    sothree:umanoShadowHeight="4dp">
-    <RelativeLayout
+
+    >
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-        <include layout="@layout/toolbar_default" />
-        <ImageView
-            android:layout_below="@+id/toolbar_default"
+        android:gravity="bottom"
+        sothree:umanoInitialState="collapsed"
+        sothree:umanoPanelHeight="@dimen/umano_panel_height"
+        sothree:umanoShadowHeight="@dimen/umano_panel_shadow_height">
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            >
+            <include layout="@layout/toolbar_default" />
+            <ImageView
+                android:id="@+id/iv_content_image"
+                android:layout_below="@+id/toolbar_default"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:scaleType="centerCrop"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_horizontal"
+                android:layout_margin="@dimen/profile_image_area_margin">
+
+                <com.pkmmte.view.CircularImageView
+                    android:id="@+id/iv_user_profile"
+                    android:layout_width="@dimen/profile_image_size"
+                    android:layout_height="@dimen/profile_image_size"
+                    android:src="@drawable/ic_launcher"
+                    app:border="true"
+                    app:border_width="0dp"
+                    app:shadow="true"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/theme_primary"
+                    android:shadowColor="@color/text_shadow"
+                    android:shadowDx="0.0"
+                    android:shadowDy="1.0"
+                    android:shadowRadius="2.0"
+                    android:text="m_e_l_t_i_n_g"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/rl_umano_panel_handle"
+                android:padding="@dimen/umano_panel_handle_padding"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/umano_panel_height"
+                android:background="@android:color/white">
+                <LinearLayout
+
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_title"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@color/text_title"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                    <TextView
+                        android:id="@+id/tv_subtitle"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textColor="@color/text_subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
+            <WebView
+                android:id="@+id/wv_content"
+                android:layout_below="@+id/rl_umano_panel_handle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <!--
+            this is sliding up panel -->
+
+
+        </RelativeLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+    <RelativeLayout
+        android:id="@+id/rl_content_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="@dimen/padding_content_menu"
+        >
+        <RatingBar
+            android:id="@+id/ratingbar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"/>
     </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <!--
-        this is sliding up panel -->
 
-
-    </RelativeLayout>
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</RelativeLayout>

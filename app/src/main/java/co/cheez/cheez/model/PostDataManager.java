@@ -47,4 +47,8 @@ public class PostDataManager {
     public Post getPostAtPosition(int position) {
         return mPostList.get(position);
     }
+
+    public void clear() {
+        mPostList.clear();
+    }
 }

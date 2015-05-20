@@ -3,6 +3,8 @@ package co.cheez.cheez;
 import android.app.Application;
 import android.content.Context;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
@@ -49,11 +51,6 @@ public class App extends Application {
     public static Context getContext() {
         return mContext;
     }
-
-    public static RequestQueue getRequestQueue() {
-        return mRequestQueue;
-    }
-
 
     private static void disableSSLCertificateChecking() {
         // https://gist.github.com/aembleton/889392
@@ -106,5 +103,17 @@ public class App extends Application {
                 .diskCacheFileCount(DISK_CACHE_FILE_COUNT)
                 .build();
         ImageLoader.getInstance().init(config);
+    }
+
+    public static void addRequest(Request request) {
+        mRequestQueue.add(request);
+    }
+
+    public static void addRequest(Request request, int timeout) {
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                timeout,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        mRequestQueue.add(request);
     }
 }

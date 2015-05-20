@@ -58,6 +58,14 @@ public class User {
         return name;
     }
 
+    public String getDisplayName() {
+        if (name != null) {
+            return name;
+        } else {
+            return "익명";
+        }
+    }
+
     public void setName(String name) {
         this.name = name;
     }

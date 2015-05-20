@@ -6,6 +6,7 @@ package co.cheez.cheez.util;
 public interface Constants {
     interface Integers {
         int OS_TYPE_ANDROID = 1;
+        int TIMEOUT_LONG = 20000;
     }
 
     interface Keys {
@@ -18,6 +19,14 @@ public interface Constants {
         String DEVICES = "devices";
 
         String URL = "url";
+        String TITLE = "title";
+        String SUBTITLE = "subtitle";
+        String IMAGE_URL = "image_url";
+        String TAGS = "tags";
+        String SOURCE_URL = "source_url";
+        String RESULTS = "results";
+        String POST_ID = "post_id";
+        String LINK_CLICKED = "link_clicked";
     }
 
     interface URLs {
@@ -26,5 +35,6 @@ public interface Constants {
         String USER = BASE + "user/";
         String AUTH_TOKEN = BASE + "api-auth-token/";
         String OG = BASE + "og/";
+        String READ_POST = BASE + "read-post/";
     }
 }

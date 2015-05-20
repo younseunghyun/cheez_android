@@ -108,7 +108,7 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                 }
         );
         showProgressDialog();
-        App.getRequestQueue().add(request);
+        App.addRequest(request);
     }
 
     private void sendAuthTokenRequest(JSONObject params) {
@@ -147,7 +147,7 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                 }
         );
         showProgressDialog();
-        App.getRequestQueue().add(request);
+        App.addRequest(request);
     }
 
 

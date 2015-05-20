@@ -10,5 +10,7 @@
     <string name="title_activity_auth">AuthActivity</string>
     <string name="error_default">오류가 발생했습니다. 잠시 후에 다시 시도해주세요.</string>
     <string name="message_progress_default">잠시만 기다려주세요</string>
-    <string name="title_activity_content_upload">ContentUploadActivity</string>
+    <string name="title_activity_content_upload">치즈 만들기</string>
+    <string name="message_title_required">제목을 입력해주세요</string>
+    <string name="message_url_required">URL을 입력해주세요</string>
 </resources>
