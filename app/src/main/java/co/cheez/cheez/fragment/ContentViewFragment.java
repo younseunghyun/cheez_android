@@ -27,6 +27,7 @@ import co.cheez.cheez.App;
 import co.cheez.cheez.R;
 import co.cheez.cheez.activity.ContentViewActivity;
 import co.cheez.cheez.automation.view.DeclareView;
+import co.cheez.cheez.automation.view.listener.PanelSlideUpTouchListener;
 import co.cheez.cheez.http.AuthorizedRequest;
 import co.cheez.cheez.http.listener.DefaultErrorListener;
 import co.cheez.cheez.http.listener.DefaultListener;
@@ -147,7 +148,7 @@ public class ContentViewFragment extends BaseFragment
         });
 
         calculateViewSizes();
-
+        mBaseContentsLayout.setOnTouchListener(new PanelSlideUpTouchListener(mSlidingLayout));
 //        mBaseContentsLayout.setOnTouchListener(new PanelSlideUpTouchListener(mSlidingLayout) {
 //            @Override
 //            protected void onSwipeUp() {
@@ -173,7 +174,7 @@ public class ContentViewFragment extends BaseFragment
         mSmallTitleTextSize = mTitleTextSize / 2;
         mSmallSubtitleTextSize = mSubtitleTextSize / 2;
         mDragViewPadding = mDragView.getPaddingTop();
-        mSmallDragViewPadding = mDragViewPadding / 2;ㄹ
+        mSmallDragViewPadding = mDragViewPadding / 2;
         mDragViewHeight = mDragView.getLayoutParams().height;
         mSmallDragViewHeight = (int) DimensionUtil.dpToPx(TOOLBAR_HEIGHT_DP);
     }
