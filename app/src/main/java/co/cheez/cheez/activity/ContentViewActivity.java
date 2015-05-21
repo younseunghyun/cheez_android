@@ -3,6 +3,7 @@ package co.cheez.cheez.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -97,6 +98,7 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
                     @Override
                     public void onResponse(JSONObject response) {
                         super.onResponse(response);
+                        Log.e("response", response.toString());
                         try {
                             JSONArray results = response.getJSONArray(Constants.Keys.RESULTS);
                             for (int i = 0; i < results.length(); i++) {
@@ -115,6 +117,7 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         super.onErrorResponse(error);
+                        Log.e("response", error.toString());
                         MessageUtil.showDefaultErrorMessage();
                     }
                 }
@@ -168,6 +171,8 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
         );
     }
 
+
+
     @Override
     protected void onResume() {
         if (mContentViewPagerAdapter != null) {
@@ -201,6 +206,7 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
     @Override
     public void onPageSelected(int position) {
         ContentViewFragment currentFragment = mContentViewPagerAdapter.getActiveFragment(position);
+        currentFragment.onChangedToCurrentPage();
         if (currentFragment.isSlideUpPanelShown()) {
             hideToolbar();
         } else {

@@ -88,10 +88,19 @@ public class ContentUploadFragment extends BaseFragment implements View.OnClickL
                             ImageLoader.getInstance().displayImage(mSelectedImageUrl, contentMainImageView);
                         }
 
+                        ((BaseActivity)getActivity()).hideProgressDialog();
+
                     }
                 },
-                new DefaultErrorListener()
+                new DefaultErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        super.onErrorResponse(error);
+                        ((BaseActivity)getActivity()).hideProgressDialog();
+                    }
+                }
         );
+        ((BaseActivity)getActivity()).showProgressDialog();
         App.addRequest(request);
     }
 

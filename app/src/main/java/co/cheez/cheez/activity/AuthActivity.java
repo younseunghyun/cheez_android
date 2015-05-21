@@ -102,7 +102,6 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         super.onErrorResponse(error);
-                        // TODO : device 중복으로 인한 에러인 경우 그냥 token 요청
                         hideProgressDialog();
                     }
                 }

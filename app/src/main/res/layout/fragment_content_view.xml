@@ -16,6 +16,7 @@
         sothree:umanoPanelHeight="@dimen/umano_panel_height"
         sothree:umanoShadowHeight="@dimen/umano_panel_shadow_height">
         <RelativeLayout
+            android:id="@+id/rl_base_contents"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
@@ -97,7 +98,8 @@
                 android:id="@+id/wv_content"
                 android:layout_below="@+id/rl_umano_panel_handle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="@color/text_subtitle"/>
             <!--
             this is sliding up panel -->
 

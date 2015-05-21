@@ -11,6 +11,7 @@
     -->
 
     <color name="theme_primary">#fed12a</color>
+    <color name="theme_secondary">#527898</color>
     <color name="text_title">#191919</color>
     <color name="text_subtitle">#998675</color>
     <color name="button">#676565</color>
@@ -18,5 +19,6 @@
     <color name="status_bar">#525151</color>
     <color name="background_gray">#eeeeee</color>
     <color name="text_shadow">#ff464646</color>
+
 
 </resources>

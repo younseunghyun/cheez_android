@@ -3,14 +3,16 @@ package co.cheez.cheez.fragment;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -40,7 +42,7 @@ import co.cheez.cheez.util.ViewAnimateUtil;
 public class ContentViewFragment extends BaseFragment
         implements SlidingUpPanelLayout.PanelSlideListener {
     public static final String KEY_POSITION = "position";
-    private static final int TOOLBAR_HEIGHT = 48;
+    private static final int TOOLBAR_HEIGHT_DP = 48;
     private boolean mSourcePageLoaded = false;
     private Post mPost;
     private boolean mLinkClicked = false;
@@ -68,6 +70,9 @@ public class ContentViewFragment extends BaseFragment
 
     @DeclareView(id = R.id.toolbar_default)
     private View mToolbar;
+
+    @DeclareView(id = R.id.rl_base_contents)
+    private RelativeLayout mBaseContentsLayout;
 
     private float mTitleTextSize;
     private float mSubtitleTextSize;
@@ -107,22 +112,59 @@ public class ContentViewFragment extends BaseFragment
             ImageLoader.getInstance().displayImage(userProfileImageUrl, mUserProfileImageView);
         }
 
-        calculateViewSizes();
-        mDragView.setOnTouchListener(new View.OnTouchListener() {
+        mContentWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                Log.e("progress", newProgress + "");
+            }
+        });
+        mContentWebView.getSettings().setJavaScriptEnabled(true);
+
+        // TODO : 정리..
+        mContentWebView.setOnTouchListener(new View.OnTouchListener() {
+            float startY;
+            float offset = DimensionUtil.dpToPx(10);
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (!mSourcePageLoaded) {
-                        mContentWebView.setWebViewClient(new WebViewClient());
-                        mContentWebView.loadUrl(mPost.getSourceUrl());
-                        mSourcePageLoaded = true;
+
+                if (mContentWebView.getScrollY() == 0) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            startY = event.getY();
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            float currentY = event.getY();
+                            if (currentY - startY > offset) {
+                                hideSlideUpPanel();
+                            }
+                            break;
                     }
                 }
-                return false;
+                return mContentWebView.onTouchEvent(event);
             }
         });
 
+        calculateViewSizes();
+
+//        mBaseContentsLayout.setOnTouchListener(new PanelSlideUpTouchListener(mSlidingLayout) {
+//            @Override
+//            protected void onSwipeUp() {
+//                super.onSwipeUp();
+//                if (!mSourcePageLoaded) {
+//                    loadWebViewContents();
+//                }
+//            }
+//        });
+
         return contentView;
+    }
+
+
+    private void loadWebViewContents() {
+        mContentWebView.loadUrl(mPost.getSourceUrl());
+        mSourcePageLoaded = true;
     }
 
     private void calculateViewSizes() {
@@ -131,9 +173,16 @@ public class ContentViewFragment extends BaseFragment
         mSmallTitleTextSize = mTitleTextSize / 2;
         mSmallSubtitleTextSize = mSubtitleTextSize / 2;
         mDragViewPadding = mDragView.getPaddingTop();
-        mSmallDragViewPadding = mDragViewPadding / 2;
+        mSmallDragViewPadding = mDragViewPadding / 2;ㄹ
         mDragViewHeight = mDragView.getLayoutParams().height;
-        mSmallDragViewHeight = (int)DimensionUtil.dpToPx(TOOLBAR_HEIGHT);
+        mSmallDragViewHeight = (int) DimensionUtil.dpToPx(TOOLBAR_HEIGHT_DP);
+    }
+
+    public void onChangedToCurrentPage() {
+        if (isSlideUpPanelShown()) {
+            mContentWebView.onResume();
+            mContentWebView.resumeTimers();
+        }
     }
 
     @Override
@@ -182,6 +231,9 @@ public class ContentViewFragment extends BaseFragment
         setDragViewState(SlidingUpPanelLayout.PanelState.EXPANDED);
         ((ContentViewActivity)getActivity()).hideToolbar(0);
         mLinkClicked = true;
+        if (!mSourcePageLoaded) {
+            loadWebViewContents();
+        }
     }
 
     private void setDragViewState(SlidingUpPanelLayout.PanelState state) {
@@ -205,7 +257,7 @@ public class ContentViewFragment extends BaseFragment
             ViewAnimateUtil.animateBackgroundColor(
                     mDragView,
                     ((ColorDrawable)mDragView.getBackground()).getColor(),
-                    getResources().getColor(R.color.theme_primary),
+                    getResources().getColor(R.color.theme_secondary),
                     ViewAnimateUtil.ANIMATION_DURATION_DEFAULT,
                     null
             );
@@ -260,17 +312,20 @@ public class ContentViewFragment extends BaseFragment
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        mContentWebView.onPause();
+        mContentWebView.pauseTimers();
         super.onPause();
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mSlidingLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-            mContentWebView.setWebViewClient(new WebViewClient());
-            mContentWebView.loadUrl(mPost.getSourceUrl());
+        if (isSlideUpPanelShown()) {
             setAnimationState(1f);
             setDragViewState(SlidingUpPanelLayout.PanelState.EXPANDED);
+
+            loadWebViewContents();
         }
     }
 
