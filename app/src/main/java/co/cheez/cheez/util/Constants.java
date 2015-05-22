@@ -7,6 +7,8 @@ public interface Constants {
     interface Integers {
         int OS_TYPE_ANDROID = 1;
         int TIMEOUT_LONG = 20000;
+        int SNS_TYPE_FACEBOOK = 1;
+        int TIMEOUT_DEFAULT = 5000;
     }
 
     interface Keys {
@@ -27,6 +29,12 @@ public interface Constants {
         String RESULTS = "results";
         String POST_ID = "post_id";
         String LINK_CLICKED = "link_clicked";
+        String SNS_USER_ID = "sns_user_id";
+        String SNS_TYPE = "sns_type";
+        String SNS_PROFILE_URL = "sns_profile_url";
+        String SNS_ACCOUNTS = "sns_accounts";
+        String EMAIL = "email";
+        String NAME = "name";
     }
 
     interface URLs {

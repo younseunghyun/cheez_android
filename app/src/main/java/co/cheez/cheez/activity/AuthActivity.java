@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +16,20 @@ import android.widget.Button;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import co.cheez.cheez.App;
@@ -32,7 +43,7 @@ import co.cheez.cheez.util.Constants;
 import co.cheez.cheez.util.DeviceUtil;
 import co.cheez.cheez.util.MessageUtil;
 
-public class AuthActivity extends BaseActivity implements View.OnClickListener {
+public class AuthActivity extends BaseActivity implements View.OnClickListener, FacebookCallback<LoginResult> {
 
     SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -45,10 +56,13 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
     @DeclareView(id = R.id.btn_skip_login, click = "this")
     Button mSkipLoginButton;
 
+    CallbackManager mFacebookCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupFacebookSdk();
+
         setContentView(ViewMapper.inflateLayout(this, this, R.layout.activity_auth));
 
         // Create the adapter that will return a fragment for each of the three
@@ -57,6 +71,19 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
 
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+    }
+
+    private void setupFacebookSdk() {
+        // setting up facebook sdk
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        mFacebookCallbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(mFacebookCallbackManager, this);
+    }
+
+    private void facebookLogin() {
+        String[] permissions = {"public_profile", "email"};
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(permissions));
     }
 
     @Override
@@ -73,7 +100,9 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                     e.printStackTrace();
                     MessageUtil.showDefaultErrorMessage();
                 }
-
+                break;
+            case R.id.btn_fb_login:
+                facebookLogin();
                 break;
         }
     }
@@ -102,6 +131,8 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         super.onErrorResponse(error);
+                        Log.e("error", error.toString());
+                        MessageUtil.showDefaultErrorMessage();
                         hideProgressDialog();
                     }
                 }
@@ -127,7 +158,8 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                                     AuthActivity.this,
                                     ContentViewActivity.class,
                                     null,
-                                    Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                    IntentCompat.FLAG_ACTIVITY_CLEAR_TASK
+                                            |Intent.FLAG_ACTIVITY_NEW_TASK
                                     );
                             startActivity(intent);
 
@@ -149,7 +181,64 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
         App.addRequest(request);
     }
 
+    // facebook login callback
+    @Override
+    public void onSuccess(LoginResult loginResult) {
+        GraphRequest request = GraphRequest.newMeRequest(
+                loginResult.getAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        // Application code
+                        hideProgressDialog();
 
+                        try {
+                            JSONObject snsAccountData = new JSONObject()
+                                    .put(Constants.Keys.SNS_USER_ID, object.get("id"))
+                                    .put(Constants.Keys.SNS_TYPE, Constants.Integers.SNS_TYPE_FACEBOOK)
+                                    .put(Constants.Keys.SNS_PROFILE_URL, "https://www.facebook.com/" + object.get("id"));
+                            JSONArray snsAccounts = new JSONArray().put(snsAccountData);
+                            JSONArray devices = new JSONArray().put(DeviceUtil.getDeviceInfo());
+                            JSONObject userData = new JSONObject()
+                                    .put(Constants.Keys.NAME, object.get("name"))
+                                    .put(Constants.Keys.EMAIL, object.get("email"))
+                                    .put(Constants.Keys.DEVICES, devices)
+                                    .put(Constants.Keys.SNS_ACCOUNTS, snsAccounts);
+
+                            sendSignupRequest(userData);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            MessageUtil.showDefaultErrorMessage();
+                        }
+
+                        // TODO : send request to cheez server
+                    }
+                });
+        Bundle parameters = new Bundle();
+        showProgressDialog();
+        parameters.putString("fields", "id,name,email");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+
+    @Override
+    public void onCancel() {
+
+    }
+
+    @Override
+    public void onError(FacebookException e) {
+        MessageUtil.showDefaultErrorMessage();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

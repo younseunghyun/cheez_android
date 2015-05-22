@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import co.cheez.cheez.automation.lifecycle.LifecycleObserver;
 import co.cheez.cheez.event.PostAddedEvent;
 import co.cheez.cheez.fragment.BaseFragment;
 import co.cheez.cheez.fragment.ContentViewFragment;

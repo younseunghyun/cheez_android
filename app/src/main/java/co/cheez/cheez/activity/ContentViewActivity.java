@@ -2,8 +2,8 @@ package co.cheez.cheez.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -51,6 +51,9 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
     @DeclareView(id = R.id.rl_btnset_toolbar)
     View mToolbarButtonset;
 
+    private boolean waintingResponse = false;
+    private int LOAD_OFFSET = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +63,8 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
                     this,
                     AuthActivity.class,
                     null,
-                    Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    IntentCompat.FLAG_ACTIVITY_CLEAR_TASK
+                            |Intent.FLAG_ACTIVITY_NEW_TASK
             );
             startActivity(intent);
             return;
@@ -78,18 +82,12 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
         mViewPager.setOnPageChangeListener(this);
 
         requestPostList();
-
-
-        // 너중에 지우자
-        mUploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(BaseActivity.getIntent(ContentViewActivity.this, ContentUploadActivity.class, null));
-            }
-        });
     }
 
     private void requestPostList() {
+        if (waintingResponse) {
+            return;
+        }
         Request request = new AuthorizedRequest(
                 Request.Method.GET,
                 Constants.URLs.POST,
@@ -98,30 +96,42 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
                     @Override
                     public void onResponse(JSONObject response) {
                         super.onResponse(response);
-                        Log.e("response", response.toString());
                         try {
                             JSONArray results = response.getJSONArray(Constants.Keys.RESULTS);
-                            for (int i = 0; i < results.length(); i++) {
+                            int resultCount = results.length();
+                            for (int i = 0; i < resultCount; i++) {
                                 Post post = Post.fromJsonString(results.getString(i));
                                 PostDataManager.getInstance().append(post);
+                            }
+
+
+                            if (resultCount > 0) {
+                                waintingResponse = false;
+                            } else {
+                                // TODO : 결과 수가 0이면 다음 요청 추가로 보내지 않도록 막고 더미 포스트 추가하기
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             MessageUtil.showDefaultErrorMessage();
+                            waintingResponse = false;
+                        }
+                        if (mSplashImageView.isShown()) {
+                            hideSplashView();
                         }
 
-                        hideSplashView();
+
                     }
                 },
                 new DefaultErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         super.onErrorResponse(error);
-                        Log.e("response", error.toString());
                         MessageUtil.showDefaultErrorMessage();
+                        waintingResponse = false;
                     }
                 }
         );
+        waintingResponse = true;
         App.addRequest(request, Constants.Integers.TIMEOUT_LONG);
     }
 
@@ -211,6 +221,11 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
             hideToolbar();
         } else {
             showToolbar();
+        }
+
+        // load more posts
+        if (position >= mContentViewPagerAdapter.getCount() - LOAD_OFFSET) {
+            requestPostList();
         }
     }
 

@@ -26,6 +26,8 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import co.cheez.cheez.util.Constants;
+
 /**
  * Created by jiho on 5/10/15.
  */
@@ -106,7 +108,7 @@ public class App extends Application {
     }
 
     public static void addRequest(Request request) {
-        mRequestQueue.add(request);
+        addRequest(request, Constants.Integers.TIMEOUT_DEFAULT);
     }
 
     public static void addRequest(Request request, int timeout) {
