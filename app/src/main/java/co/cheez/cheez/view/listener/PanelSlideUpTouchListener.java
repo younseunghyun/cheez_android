@@ -1,4 +1,4 @@
-package co.cheez.cheez.automation.view.listener;
+package co.cheez.cheez.view.listener;
 
 import android.view.MotionEvent;
 import android.view.View;

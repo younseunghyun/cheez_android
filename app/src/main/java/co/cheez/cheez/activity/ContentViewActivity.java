@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.android.volley.Request;
@@ -18,6 +21,7 @@ import org.json.JSONObject;
 import java.util.concurrent.Callable;
 
 import co.cheez.cheez.App;
+import co.cheez.cheez.BuildConfig;
 import co.cheez.cheez.R;
 import co.cheez.cheez.adapter.ContentViewPagerAdapter;
 import co.cheez.cheez.auth.Auth;
@@ -31,11 +35,14 @@ import co.cheez.cheez.http.listener.DefaultListener;
 import co.cheez.cheez.model.Post;
 import co.cheez.cheez.model.PostDataManager;
 import co.cheez.cheez.util.Constants;
+import co.cheez.cheez.util.ImageDisplayUtil;
 import co.cheez.cheez.util.MessageUtil;
 import co.cheez.cheez.util.ViewAnimateUtil;
 
 
-public class ContentViewActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+public class ContentViewActivity extends BaseActivity
+        implements ViewPager.OnPageChangeListener, View.OnClickListener {
+    private static final int LOAD_OFFSET = 2;
 
     ContentViewPagerAdapter mContentViewPagerAdapter;
 
@@ -45,14 +52,36 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
     @DeclareView(id = R.id.iv_splash)
     ImageView mSplashImageView;
 
-    @DeclareView(id = R.id.btn_upload)
-    Button mUploadButton;
-
     @DeclareView(id = R.id.rl_btnset_toolbar)
     View mToolbarButtonset;
 
+    @DeclareView(id = R.id.btn_drawer_toggle, click = "this")
+    ImageButton mDrawerToggleButton;
+
+    @DeclareView(id = R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+
+    @DeclareView(id = R.id.ll_drawer)
+    View mDrawerView;
+
+    @DeclareView(id = R.id.btn_upload, click = "this")
+    Button mUploadButton;
+
+    @DeclareView(id = R.id.btn_close_drawer, click = "this")
+    ImageButton mCloseDrawerButton;
+
+    @DeclareView(id = R.id.rl_drawer_btn_profile, click = "this")
+    View mShowProfileButton;
+
+    @DeclareView(id = R.id.iv_drawer_profile)
+    ImageView mDrawerProfileImageView;
+
+    @DeclareView(id = R.id.btn_show_saved_contents, click = "this")
+    View mShowSavedPostsButton;
+
+
     private boolean waintingResponse = false;
-    private int LOAD_OFFSET = 2;
+    private int nextPage = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +109,17 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mContentViewPagerAdapter);
         mViewPager.setOnPageChangeListener(this);
+//        mViewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
+//            @Override
+//            public void transformPage(View page, float position) {
+//                page.setAlpha(1 - (Math.abs(position)/2));
+//            }
+//        });
+
+        // TODO : auth에서 프로필 이미지 가져오기
+        ImageDisplayUtil.displayImage(
+                "drawable://" + R.drawable.ic_launcher,
+                mDrawerProfileImageView);
 
         requestPostList();
     }
@@ -88,14 +128,18 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
         if (waintingResponse) {
             return;
         }
+
         Request request = new AuthorizedRequest(
                 Request.Method.GET,
-                Constants.URLs.POST,
+                Constants.URLs.POST + "?page=" + nextPage,
                 null,
                 new DefaultListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                         super.onResponse(response);
+                        if (BuildConfig.DEBUG) {
+                            Log.e("response", response.toString());
+                        }
                         try {
                             JSONArray results = response.getJSONArray(Constants.Keys.RESULTS);
                             int resultCount = results.length();
@@ -104,11 +148,12 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
                                 PostDataManager.getInstance().append(post);
                             }
 
-
                             if (resultCount > 0) {
                                 waintingResponse = false;
+                                nextPage ++;
                             } else {
                                 // TODO : 결과 수가 0이면 다음 요청 추가로 보내지 않도록 막고 더미 포스트 추가하기
+                                PostDataManager.getInstance().append(null);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -232,5 +277,35 @@ public class ContentViewActivity extends BaseActivity implements ViewPager.OnPag
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_upload:
+                startActivity(BaseActivity.getIntent(this, ContentUploadActivity.class, null));
+                break;
+            case R.id.btn_close_drawer:
+                mDrawerLayout.closeDrawer(mDrawerView);
+                break;
+            case R.id.btn_drawer_toggle:
+                if (mDrawerLayout.isDrawerOpen(mDrawerView)) {
+                    mDrawerLayout.closeDrawer(mDrawerView);
+                } else {
+                    mDrawerLayout.openDrawer(mDrawerView);
+                }
+                break;
+            case R.id.rl_drawer_btn_profile:
+                Bundle args = new Bundle();
+                Intent intent
+                        = ProfileActivity.getIntentWithUserId(this, Auth.getInstance().getUser().getId());
+                startActivity(intent);
+                break;
+            case R.id.btn_show_saved_contents:
+                Intent savedPostListActivityIntent
+                        = BaseActivity.getIntent(this, SavedPostListActivity.class, null);
+                startActivity(savedPostListActivityIntent);
+                break;
+        }
     }
 }

@@ -30,6 +30,7 @@
                 android:scaleType="centerCrop"
                 />
             <LinearLayout
+                android:id="@+id/ll_profile_area"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -42,12 +43,12 @@
                     android:id="@+id/iv_user_profile"
                     android:layout_width="@dimen/profile_image_size"
                     android:layout_height="@dimen/profile_image_size"
-                    android:src="@drawable/ic_launcher"
                     app:border="true"
                     app:border_width="0dp"
                     app:shadow="true"
                     />
                 <TextView
+                    android:id="@+id/tv_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/theme_primary"
@@ -94,7 +95,7 @@
                         />
                 </LinearLayout>
             </RelativeLayout>
-            <WebView
+            <co.cheez.cheez.automation.view.ScrollObservableWebView
                 android:id="@+id/wv_content"
                 android:layout_below="@+id/rl_umano_panel_handle"
                 android:layout_width="match_parent"
@@ -111,16 +112,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:clipToPadding="false"
         android:padding="@dimen/padding_content_menu"
         >
         <RatingBar
             android:id="@+id/ratingbar"
-            style="?android:attr/ratingBarStyleSmall"
             android:numStars="5"
             android:stepSize="0.5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true">
+            <Button
+                android:id="@+id/btn_comment"
+                android:layout_width="@dimen/btn_size_normal"
+                android:layout_height="@dimen/btn_size_normal" />
+            <Button
+                android:id="@+id/btn_share"
+                android:layout_width="@dimen/btn_size_normal"
+                android:layout_height="@dimen/btn_size_normal" />
+            <Button
+                android:id="@+id/btn_menu"
+                android:layout_width="@dimen/btn_size_normal"
+                android:layout_height="@dimen/btn_size_normal" />
+        </LinearLayout>
     </RelativeLayout>
 
 </RelativeLayout>

@@ -14,4 +14,19 @@
     <string name="title_activity_content_upload">치즈 만들기</string>
     <string name="message_title_required">제목을 입력해주세요</string>
     <string name="message_url_required">URL을 입력해주세요</string>
+    <string name="label_upload_cheez">신선한 치즈를 만들어주세요!</string>
+    <string name="label_show_profile">내 프로필 보기</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="label_my_posts_empty">아직 만든 치즈가 없어요 :(</string>
+    <string name="label_report_dialog_title">신고하기</string>
+    <string name="label_report_reason">신고사유</string>
+    <string name="hint_report_body">ex) 제목과 관련 없는 링크</string>
+    <string name="label_report_confirm">해당 게시물을 신고하시겠습니까?</string>
+    <string name="label_report">신고</string>
+    <string name="message_enter_report_body">내용을 입력해주세요</string>
+    <string name="message_reported">신고되었습니다.</string>
+    <string name="title_activity_saved_post_list">SavedPostListActivity</string>
+    <string name="title_saved_cheez_list">저장한 치즈</string>
+    <string name="label_empty_saved_post">저장된 치즈가 없어요 :(</string>
+    <string name="label_show_bookmark">북마크 보기</string>
 </resources>

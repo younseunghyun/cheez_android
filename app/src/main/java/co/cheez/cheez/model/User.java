@@ -7,11 +7,14 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import co.cheez.cheez.R;
+
 /**
  * Created by jiho on 5/15/15.
  */
 public class User {
     private long id;
+    private long uploadCount;
     private boolean following;
     private String name;
     private String imageUrl;
@@ -74,7 +77,22 @@ public class User {
         return imageUrl;
     }
 
+    public String getDisplayImageUrl() {
+        if (imageUrl == null) {
+            return "drawable://" + R.drawable.ic_launcher;
+        }
+        return imageUrl;
+    }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public long getUploadCount() {
+        return uploadCount;
+    }
+
+    public void setUploadCount(long uploadCount) {
+        this.uploadCount = uploadCount;
     }
 }

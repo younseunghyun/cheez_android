@@ -9,8 +9,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
@@ -27,6 +29,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import co.cheez.cheez.util.Constants;
+import co.cheez.cheez.util.ViewAnimateUtil;
 
 /**
  * Created by jiho on 5/10/15.
@@ -37,6 +40,7 @@ public class App extends Application {
     private static final int DISK_CACHE_FILE_COUNT = 20;
     private static Context mContext;
     private static RequestQueue mRequestQueue;
+    private static DisplayImageOptions mDisplayImageOptions;
 
     @Override
     public void onCreate() {
@@ -99,12 +103,18 @@ public class App extends Application {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .denyCacheImageMultipleSizesInMemory()
                 .memoryCache(new LruMemoryCache(MEMORY_CACHE_SIZE))
-                .memoryCacheSize(MEMORY_CACHE_SIZE)
+                //.memoryCacheSize(MEMORY_CACHE_SIZE)
                 .diskCache(new UnlimitedDiscCache(cacheDir))
                 .diskCacheSize(DISK_CACHE_SIZE)
                 .diskCacheFileCount(DISK_CACHE_FILE_COUNT)
                 .build();
         ImageLoader.getInstance().init(config);
+
+        mDisplayImageOptions = new DisplayImageOptions.Builder()
+                .displayer(new FadeInBitmapDisplayer(ViewAnimateUtil.ANIMATION_DURATION_DEFAULT))
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
     }
 
     public static void addRequest(Request request) {
@@ -117,5 +127,9 @@ public class App extends Application {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         mRequestQueue.add(request);
+    }
+
+    public static DisplayImageOptions getDefaultImageDisplayOption() {
+        return mDisplayImageOptions;
     }
 }

@@ -13,7 +13,8 @@ import java.util.concurrent.Callable;
  * Created by jiho on 5/18/15.
  */
 public class ViewAnimateUtil {
-    public static final long ANIMATION_DURATION_DEFAULT = 300;
+    public static final int ANIMATION_DURATION_DEFAULT = 300;
+    public static int ANIMATION_DURATION_SHORT = 100;
 
     public static void animateBackgroundColor (
             final View targetView,

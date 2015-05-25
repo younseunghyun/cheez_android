@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--
+    #191919   제목
+    #fed327   노랑
+    #527898   파랑, 부제목
+    #959595   연회색, 라인
+    #464647   진회색, 댓글텍스트
+    #ffffff   menu 글씨
+
     #fed12a    노랑색들
     #191919    제목
     #998675    부제목
@@ -10,15 +17,20 @@
     #eeeeee    백그라운드 연회색
     -->
 
-    <color name="theme_primary">#fed12a</color>
+    <color name="theme_primary">#fed327</color>
     <color name="theme_secondary">#527898</color>
     <color name="text_title">#191919</color>
-    <color name="text_subtitle">#998675</color>
-    <color name="button">#676565</color>
+    <color name="text_subtitle">#527898</color>
+    <color name="button">#86a1b7</color>
     <color name="text_menu">#ffffff</color>
     <color name="status_bar">#525151</color>
-    <color name="background_gray">#eeeeee</color>
+    <color name="darkgray">#464647</color>
+    <color name="lightgray">#959595</color>
     <color name="text_shadow">#ff464646</color>
+    <color name="text_toolbar">#ffffff</color>
+    <color name="background_post_list_item">#ffffff</color>
+    <color name="text_dialog_title">#ffffff</color>
+    <color name="input_border">#ebebeb</color>
 
 
 </resources>

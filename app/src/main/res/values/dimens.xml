@@ -10,5 +10,22 @@
     <dimen name="profile_image_size">64dp</dimen>
     <dimen name="profile_image_area_margin">16dp</dimen>
     <dimen name="padding_content_menu">8dp</dimen>
+    <dimen name="margin_drawer_items">16dp</dimen>
+    <dimen name="drawer_divider_width">1dp</dimen>
+    <dimen name="drawer_profile_image_size">72dp</dimen>
+    <dimen name="mypage_profile_image_size">64dp</dimen>
+    <dimen name="postlist_image_size">108dp</dimen>
+    <dimen name="padding_listitem">16dp</dimen>
+    <dimen name="padding_post_loading_progress">8dp</dimen>
+    <dimen name="empty_label_height">48dp</dimen>
+    <dimen name="margin_listitem_horizontal">16dp</dimen>
+    <dimen name="margin_listitem_vertical">8dp</dimen>
+    <dimen name="padding_profile_info_area">16dp</dimen>
+    <dimen name="dialog_titlebar_height">48dp</dimen>
+    <dimen name="padding_default">16dp</dimen>
+    <dimen name="report_dialog_body_padding">12dp</dimen>
+    <dimen name="report_body_height">200dp</dimen>
+    <dimen name="input_padding">8dp</dimen>
+    <dimen name="btn_size_small">36dp</dimen>
 
 </resources>

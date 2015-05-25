@@ -35,6 +35,11 @@ public interface Constants {
         String SNS_ACCOUNTS = "sns_accounts";
         String EMAIL = "email";
         String NAME = "name";
+        String RATING = "rating";
+        String PAGE = "page";
+        String USER_ID = "user_id";
+        String REASON = "reason";
+        String SAVED = "saved";
     }
 
     interface URLs {
@@ -44,5 +49,7 @@ public interface Constants {
         String AUTH_TOKEN = BASE + "api-auth-token/";
         String OG = BASE + "og/";
         String READ_POST = BASE + "read-post/";
+        String REPORT = BASE + "report/";
+        String SAVED_POST = BASE + "saved-post/";
     }
 }

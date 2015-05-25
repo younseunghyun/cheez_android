@@ -11,8 +11,9 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity
             android:name=".activity.ContentViewActivity"
@@ -30,17 +31,28 @@
         <activity
             android:name=".activity.ContentUploadActivity"
             android:label="@string/title_activity_content_upload" >
-
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:mimeType="text/plain" />
 
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-
         <activity android:name="com.facebook.FacebookActivity" />
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:label="@string/title_activity_profile"
+            android:parentActivityName=".activity.ContentViewActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.cheez.cheez.activity.ContentViewActivity" />
+        </activity>
+        <activity
+            android:name=".activity.SavedPostListActivity"
+            android:label="@string/title_activity_saved_post_list" >
+        </activity>
     </application>
 
 </manifest>

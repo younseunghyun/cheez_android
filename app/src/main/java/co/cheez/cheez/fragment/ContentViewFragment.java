@@ -1,33 +1,44 @@
 package co.cheez.cheez.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pkmmte.view.CircularImageView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import co.cheez.cheez.App;
 import co.cheez.cheez.R;
 import co.cheez.cheez.activity.ContentViewActivity;
+import co.cheez.cheez.activity.ProfileActivity;
+import co.cheez.cheez.automation.view.ContentPopupMenu;
 import co.cheez.cheez.automation.view.DeclareView;
-import co.cheez.cheez.automation.view.listener.PanelSlideUpTouchListener;
+import co.cheez.cheez.automation.view.ScrollObservableWebView;
 import co.cheez.cheez.http.AuthorizedRequest;
 import co.cheez.cheez.http.listener.DefaultErrorListener;
 import co.cheez.cheez.http.listener.DefaultListener;
@@ -35,13 +46,16 @@ import co.cheez.cheez.model.Post;
 import co.cheez.cheez.model.PostDataManager;
 import co.cheez.cheez.util.Constants;
 import co.cheez.cheez.util.DimensionUtil;
+import co.cheez.cheez.util.ImageDisplayUtil;
 import co.cheez.cheez.util.ViewAnimateUtil;
+import co.cheez.cheez.view.listener.ContentMenuItemClickListener;
+import co.cheez.cheez.view.listener.PanelSlideUpTouchListener;
 
 /**
  * Created by jiho on 5/13/15.
  */
 public class ContentViewFragment extends BaseFragment
-        implements SlidingUpPanelLayout.PanelSlideListener {
+        implements SlidingUpPanelLayout.PanelSlideListener, View.OnClickListener {
     public static final String KEY_POSITION = "position";
     private static final int TOOLBAR_HEIGHT_DP = 48;
     private boolean mSourcePageLoaded = false;
@@ -55,7 +69,7 @@ public class ContentViewFragment extends BaseFragment
     private ImageView mContentImageView;
 
     @DeclareView(id = R.id.wv_content)
-    private WebView mContentWebView;
+    private ScrollObservableWebView mContentWebView;
 
     @DeclareView(id = R.id.tv_title)
     private TextView mTitleLabel;
@@ -63,7 +77,7 @@ public class ContentViewFragment extends BaseFragment
     @DeclareView(id = R.id.tv_subtitle)
     private TextView mSubtitleLabel;
 
-    @DeclareView(id = R.id.iv_user_profile)
+    @DeclareView(id = R.id.iv_user_profile, click = "this")
     private CircularImageView mUserProfileImageView;
 
     @DeclareView(id = R.id.rl_umano_panel_handle)
@@ -75,6 +89,27 @@ public class ContentViewFragment extends BaseFragment
     @DeclareView(id = R.id.rl_base_contents)
     private RelativeLayout mBaseContentsLayout;
 
+    @DeclareView(id = R.id.btn_comment, click = "this")
+    private Button commentButton;
+
+    @DeclareView(id = R.id.btn_share, click = "this")
+    private Button shareButton;
+
+    @DeclareView(id = R.id.btn_menu, click = "this")
+    private Button menuButton;
+
+    @DeclareView(id = R.id.ratingbar)
+    private RatingBar ratingBar;
+
+    @DeclareView(id = R.id.rl_content_menu)
+    private View mContentMenuWrapper;
+
+    @DeclareView(id = R.id.ll_profile_area)
+    private View mProfileArea;
+
+    @DeclareView(id = R.id.tv_username)
+    private TextView mUsernameLabel;
+
     private float mTitleTextSize;
     private float mSubtitleTextSize;
     private float mSmallTitleTextSize;
@@ -84,6 +119,10 @@ public class ContentViewFragment extends BaseFragment
     private int mDragViewHeight;
     private int mSmallDragViewHeight;
 
+    private PopupMenu mPopupMenu;
+    private PopupWindow mMenuPopupWindow;
+    private View mContentView;
+    private int mContentMenuMaxTop;
 
 
     public static BaseFragment newInstance(int position) {
@@ -96,23 +135,57 @@ public class ContentViewFragment extends BaseFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View contentView = getContentView(getActivity(), getLayoutResourceId());
+        mContentView = getContentView(getActivity(), getLayoutResourceId());
 
         Bundle args = getArguments();
         int position = args.getInt(KEY_POSITION);
         mPost = PostDataManager.getInstance().getPostAtPosition(position);
-        ImageLoader.getInstance().displayImage(mPost.getImageUrl(), mContentImageView);
+
+        if (mPost == null) {
+            // 마지막까지 온 경우
+            mContentMenuWrapper.setVisibility(View.GONE);
+            mSlidingLayout.setPanelHeight(0);
+            mProfileArea.setVisibility(View.GONE);
+            if (Build.VERSION.SDK_INT >= 21) {
+                mContentImageView.setImageDrawable(getResources().getDrawable(R.drawable.empty, null));
+            } else {
+                mContentImageView.setImageDrawable(getResources().getDrawable(R.drawable.empty));
+            }
+            return mContentView;
+        }
+
+        ImageDisplayUtil.displayImage(mPost.getImageUrl(), mContentImageView);
         mTitleLabel.setText(mPost.getTitle());
         mSubtitleLabel.setText(mPost.getSubtitle());
+        mUsernameLabel.setText(mPost.getUser().getDisplayName());
+
 
         mSlidingLayout.setDragView(mDragView);
         mSlidingLayout.setPanelSlideListener(this);
 
-        String userProfileImageUrl = mPost.getUser().getImageUrl();
-        if (userProfileImageUrl != null) {
-            ImageLoader.getInstance().displayImage(userProfileImageUrl, mUserProfileImageView);
-        }
+        String userProfileImageUrl = mPost.getUser().getDisplayImageUrl();
+        ImageDisplayUtil.displayImage(userProfileImageUrl, mUserProfileImageView);
 
+        ratingBar.setRating(mPost.getRating());
+
+        mContentMenuMaxTop = (int) DimensionUtil.dpToPx(60);
+        mContentWebView.setOnScrollListener(new ScrollObservableWebView.OnScrollListener() {
+            @Override
+            public void onScroll(int l, int t, int oldl, int oldt) {
+
+                if (mContentWebView.getMeasuredContentHeight() > 0
+                        && t >= mContentWebView.getMeasuredContentHeight() - mContentWebView.getMeasuredHeight() - 100) {
+                    mContentMenuWrapper.setTop(0);
+                    return;
+                }
+                int currentTop = mContentMenuWrapper.getTop();
+                int nextTop = Math.min(currentTop + (t - oldt), mContentMenuMaxTop);
+                if (nextTop < 0) nextTop = 1;
+                mContentMenuWrapper.setTop(nextTop);
+
+
+            }
+        });
         mContentWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -120,6 +193,14 @@ public class ContentViewFragment extends BaseFragment
                 Log.e("progress", newProgress + "");
             }
         });
+        mContentWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+
         mContentWebView.getSettings().setJavaScriptEnabled(true);
 
         // TODO : 정리..
@@ -147,6 +228,10 @@ public class ContentViewFragment extends BaseFragment
             }
         });
 
+        // set popup menu
+        mPopupMenu = new ContentPopupMenu(getActivity(), menuButton, mPost.getId());
+
+
         calculateViewSizes();
         mBaseContentsLayout.setOnTouchListener(new PanelSlideUpTouchListener(mSlidingLayout));
 //        mBaseContentsLayout.setOnTouchListener(new PanelSlideUpTouchListener(mSlidingLayout) {
@@ -159,7 +244,7 @@ public class ContentViewFragment extends BaseFragment
 //            }
 //        });
 
-        return contentView;
+        return mContentView;
     }
 
 
@@ -223,6 +308,7 @@ public class ContentViewFragment extends BaseFragment
         mContentWebView.onPause();
         setDragViewState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         ((ContentViewActivity)getActivity()).showToolbar();
+        mContentMenuWrapper.setTop(0);
     }
 
     @Override
@@ -301,6 +387,8 @@ public class ContentViewFragment extends BaseFragment
         try {
             JSONObject params = new JSONObject()
                     .put(Constants.Keys.POST_ID, mPost.getId())
+                    .put(Constants.Keys.RATING, ratingBar.getRating())
+                    .put(Constants.Keys.SAVED, mPost.isSaved())
                     .put(Constants.Keys.LINK_CLICKED, mLinkClicked);
             Request request = new AuthorizedRequest(
                     Request.Method.POST,
@@ -310,7 +398,7 @@ public class ContentViewFragment extends BaseFragment
                     new DefaultErrorListener()
             );
             App.addRequest(request);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         mContentWebView.onPause();
@@ -354,4 +442,63 @@ public class ContentViewFragment extends BaseFragment
             return false;
         }
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_comment:
+
+                break;
+            case R.id.btn_share:
+
+                break;
+            case R.id.btn_menu:
+                showPopupMenu();
+                break;
+            case R.id.iv_user_profile:
+                Intent intent = ProfileActivity.getIntentWithUserId(getActivity(), mPost.getUser().getId());
+                getActivity().startActivity(intent);
+                break;
+        }
+    }
+
+    private void showPopupMenu() {
+        if (mMenuPopupWindow == null) {
+            View popupMenuView = LayoutInflater.from(getActivity()).inflate(R.layout.popupwindow_menu, null);
+
+            // adjust menu position
+            Display display = getActivity().getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int[] menuButtonLocation = new int[2];
+            menuButton.getLocationInWindow(menuButtonLocation);
+            popupMenuView.setPadding(0, 0, 0, size.y - menuButtonLocation[1]);
+
+
+            mMenuPopupWindow = new PopupWindow(
+                    popupMenuView,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+
+            popupMenuView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        mMenuPopupWindow.dismiss();
+                    }
+                    return false;
+                }
+            });
+
+            ContentMenuItemClickListener listener = new ContentMenuItemClickListener(mPost);
+            popupMenuView.findViewById(R.id.btn_report).setOnClickListener(listener);
+            popupMenuView.findViewById(R.id.btn_show_tags).setOnClickListener(listener);
+            CompoundButton saveToggleButton = ((CompoundButton) popupMenuView.findViewById(R.id.tb_save));
+            saveToggleButton.setChecked(mPost.isSaved());
+            saveToggleButton.setOnCheckedChangeListener(listener);
+
+        }
+        mMenuPopupWindow.showAtLocation(mContentView, Gravity.NO_GRAVITY, 0, 0);
+    }
+
 }

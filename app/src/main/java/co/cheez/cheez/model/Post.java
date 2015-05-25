@@ -13,7 +13,7 @@ public class Post {
     private long id;
     private float rating;
     private float averageRating;
-    private boolean rated;
+    private boolean saved;
     private String body;
     private String imageUrl;
     private String sourceUrl;
@@ -21,6 +21,7 @@ public class Post {
     private String title;
 
     private User user;
+    private ReadPostRel[] readPostRels;
 
     public static Post fromJsonObject(JSONObject object) {
         return fromJsonString(object.toString());
@@ -30,7 +31,19 @@ public class Post {
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
-        return gson.fromJson(jsonString, Post.class);
+
+        Post post = gson.fromJson(jsonString, Post.class);
+        ReadPostRel[] readPostRels = post.getReadPostRels();
+        if (readPostRels.length > 0) {
+            post.setRating(readPostRels[0].getRating());
+            post.setSaved(readPostRels[0].isSaved());
+        } else {
+            post.setRating(0f);
+            post.setSaved(false);
+        }
+
+
+        return post;
     }
 
     public long getId() {
@@ -48,6 +61,7 @@ public class Post {
         this.rating = rating;
     }
 
+
     public float getAverageRating() {
         return averageRating;
     }
@@ -57,11 +71,7 @@ public class Post {
     }
 
     public boolean isRated() {
-        return rated;
-    }
-
-    public void setRated(boolean rated) {
-        this.rated = rated;
+        return rating > 0;
     }
 
     public String getBody() {
@@ -110,5 +120,21 @@ public class Post {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public ReadPostRel[] getReadPostRels() {
+        return readPostRels;
+    }
+
+    public void setReadPostRels(ReadPostRel[] readPostRels) {
+        this.readPostRels = readPostRels;
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
     }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_post_list_item"
+        android:layout_marginLeft="@dimen/margin_listitem_horizontal"
+        android:layout_marginRight="@dimen/margin_listitem_horizontal"
+        android:layout_marginTop="@dimen/margin_listitem_vertical"
+        android:layout_marginBottom="@dimen/margin_listitem_vertical"
+        android:padding="@dimen/padding_listitem"
+        >
+
+        <ImageView
+            android:id="@+id/iv_post_image"
+            android:padding="@dimen/padding_listitem"
+            android:layout_width="@dimen/postlist_image_size"
+            android:layout_height="@dimen/postlist_image_size"
+            android:scaleType="centerCrop"
+            android:layout_marginRight="@dimen/padding_listitem"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_post_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_title"
+                />
+            <TextView
+                android:id="@+id/tv_post_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_subtitle"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

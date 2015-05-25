@@ -10,7 +10,6 @@ import android.widget.ImageView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +24,7 @@ import co.cheez.cheez.http.listener.DefaultErrorListener;
 import co.cheez.cheez.http.listener.DefaultListener;
 import co.cheez.cheez.model.OG;
 import co.cheez.cheez.util.Constants;
+import co.cheez.cheez.util.ImageDisplayUtil;
 import co.cheez.cheez.util.MessageUtil;
 
 /**
@@ -85,7 +85,7 @@ public class ContentUploadFragment extends BaseFragment implements View.OnClickL
                         mSelectedImageUrl = og.getImage();
 
                         if (mSelectedImageUrl != null) {
-                            ImageLoader.getInstance().displayImage(mSelectedImageUrl, contentMainImageView);
+                            ImageDisplayUtil.displayImage(mSelectedImageUrl, contentMainImageView);
                         }
 
                         ((BaseActivity)getActivity()).hideProgressDialog();

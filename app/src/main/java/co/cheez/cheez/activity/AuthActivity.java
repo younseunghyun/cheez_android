@@ -39,6 +39,7 @@ import co.cheez.cheez.automation.view.DeclareView;
 import co.cheez.cheez.automation.view.ViewMapper;
 import co.cheez.cheez.http.listener.DefaultErrorListener;
 import co.cheez.cheez.http.listener.DefaultListener;
+import co.cheez.cheez.model.User;
 import co.cheez.cheez.util.Constants;
 import co.cheez.cheez.util.DeviceUtil;
 import co.cheez.cheez.util.MessageUtil;
@@ -116,6 +117,8 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener, 
                     @Override
                     public void onResponse(JSONObject response) {
                         super.onResponse(response);
+                        User user = User.fromJsonObject(response);
+                        Auth.getInstance().setUser(user);
                         try {
                             JSONObject params = new JSONObject()
                                     .put(Constants.Keys.DEVICE, DeviceUtil.getDeviceInfo());
