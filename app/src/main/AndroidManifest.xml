@@ -17,6 +17,7 @@
 
         <activity
             android:name=".activity.ContentViewActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,10 +27,12 @@
         </activity>
         <activity
             android:name=".activity.AuthActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_auth" >
         </activity>
         <activity
             android:name=".activity.ContentUploadActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_content_upload" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -40,9 +43,11 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name="com.facebook.FacebookActivity" />
+        <activity android:name="com.facebook.FacebookActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ProfileActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_profile"
             android:parentActivityName=".activity.ContentViewActivity" >
             <meta-data
@@ -51,6 +56,7 @@
         </activity>
         <activity
             android:name=".activity.SavedPostListActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_saved_post_list" >
         </activity>
         <meta-data

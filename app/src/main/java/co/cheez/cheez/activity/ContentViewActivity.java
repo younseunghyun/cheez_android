@@ -35,10 +35,12 @@ import co.cheez.cheez.http.listener.DefaultErrorListener;
 import co.cheez.cheez.http.listener.DefaultListener;
 import co.cheez.cheez.model.Post;
 import co.cheez.cheez.model.PostDataManager;
+import co.cheez.cheez.model.User;
 import co.cheez.cheez.util.Constants;
 import co.cheez.cheez.util.ImageDisplayUtil;
 import co.cheez.cheez.util.MessageUtil;
 import co.cheez.cheez.util.ViewAnimateUtil;
+import co.cheez.cheez.view.ContentViewPager;
 
 
 public class ContentViewActivity extends BaseActivity
@@ -48,7 +50,7 @@ public class ContentViewActivity extends BaseActivity
     ContentViewPagerAdapter mContentViewPagerAdapter;
 
     @DeclareView(id = R.id.pager)
-    ViewPager mViewPager;
+    ContentViewPager mViewPager;
 
     @DeclareView(id = R.id.iv_splash)
     ImageView mSplashImageView;
@@ -106,12 +108,25 @@ public class ContentViewActivity extends BaseActivity
         View contentView = ViewMapper.inflateLayout(this, this, R.layout.activity_content_view);
         setContentView(contentView);
 
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mContentViewPagerAdapter = new ContentViewPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mContentViewPagerAdapter);
+        mViewPager.setSwipeEnabledChecker(new ContentViewPager.SwipeEnabledChecker() {
+            @Override
+            public boolean isSwipeEnabled() {
+                try {
+                    return !mContentViewPagerAdapter
+                            .getActiveFragment(mViewPager.getCurrentItem()).isSlideUpPanelShown();
+                } catch (NullPointerException e) {
+                    return true;
+                }
+            }
+        });
         mViewPager.setOnPageChangeListener(this);
 //        mViewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
 //            @Override
@@ -121,10 +136,21 @@ public class ContentViewActivity extends BaseActivity
 //        });
 
         // TODO : auth에서 프로필 이미지 가져오기
-        ImageDisplayUtil.displayImage(
-                "drawable://" + R.drawable.ic_launcher,
-                mDrawerProfileImageView);
-        mDrawerUsernameLabel.setText(Auth.getInstance().getUser().getDisplayName());
+        User user = Auth.getInstance().getUser();
+        if (user != null) {
+            ImageDisplayUtil.displayImage(
+                    user.getDisplayImageUrl(),
+                    mDrawerProfileImageView);
+            mDrawerUsernameLabel.setText(user.getDisplayName());
+        } else {
+            ImageDisplayUtil.displayImage(
+                    "drawable://" + R.drawable.ic_launcher,
+                    mDrawerProfileImageView);
+            mDrawerUsernameLabel.setText(getString(R.string.message_login_required));
+        }
+
+
+
 
         requestPostList();
     }
@@ -167,6 +193,7 @@ public class ContentViewActivity extends BaseActivity
                         }
                         if (mSplashImageView.isShown()) {
                             hideSplashView();
+                            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                         }
 
 
@@ -301,10 +328,14 @@ public class ContentViewActivity extends BaseActivity
                 }
                 break;
             case R.id.rl_drawer_btn_profile:
-                Bundle args = new Bundle();
-                Intent intent
-                        = ProfileActivity.getIntentWithUserId(this, Auth.getInstance().getUser().getId());
-                startActivity(intent);
+                User user = Auth.getInstance().getUser();
+                if (user != null) {
+                    Intent intent
+                            = ProfileActivity.getIntentWithUserId(this, user.getId());
+                    startActivity(intent);
+                } else {
+                    MessageUtil.showMessage(R.string.message_login_required);
+                }
                 break;
             case R.id.btn_show_saved_contents:
                 Intent savedPostListActivityIntent

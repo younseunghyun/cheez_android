@@ -204,6 +204,7 @@ public class ContentViewFragment extends BaseFragment
         // TODO : 정리..
         mContentWebView.setOnTouchListener(new View.OnTouchListener() {
             float startY;
+            float startX;
             float offset = DimensionUtil.dpToPx(10);
 
             @Override
@@ -212,11 +213,15 @@ public class ContentViewFragment extends BaseFragment
                 if (mContentWebView.getScrollY() == 0) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
+                            startX = event.getX();
                             startY = event.getY();
                             break;
                         case MotionEvent.ACTION_UP:
-                            float currentY = event.getY();
-                            if (currentY - startY > offset) {
+                            float dx = event.getX() - startX;
+                            float dy = event.getY() - startY;
+
+                            if (Math.abs(dy) > Math.abs(dx)
+                                && dy > offset) {
                                 hideSlideUpPanel();
                             }
                             break;
@@ -430,13 +435,27 @@ public class ContentViewFragment extends BaseFragment
 
     @Override
     public boolean onBackPressed() {
+        // webview 열려있는 경우
         if (mSlidingLayout != null
                 && mSlidingLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
             mSlidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             return true;
-        } else {
-            return false;
         }
+
+        /* 뒤로 갈 수 있는 경우
+        if (mContentWebView.canGoBack()) {
+            mContentWebView.goBack();
+            return true;
+        }
+        //*/
+
+        // 팝업 메뉴 열려있는 경우
+        if (mMenuPopupWindow.isShowing()) {
+            mMenuPopupWindow.dismiss();
+            return true;
+        }
+
+        return false;
     }
 
     @Override
