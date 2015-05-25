@@ -40,6 +40,7 @@ public interface Constants {
         String USER_ID = "user_id";
         String REASON = "reason";
         String SAVED = "saved";
+        String COMMENT = "comment";
     }
 
     interface URLs {
@@ -51,5 +52,6 @@ public interface Constants {
         String READ_POST = BASE + "read-post/";
         String REPORT = BASE + "report/";
         String SAVED_POST = BASE + "saved-post/";
+        String COMMENT = BASE + "comment/";
     }
 }

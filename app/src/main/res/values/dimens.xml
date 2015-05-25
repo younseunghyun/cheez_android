@@ -27,5 +27,13 @@
     <dimen name="report_body_height">200dp</dimen>
     <dimen name="input_padding">8dp</dimen>
     <dimen name="btn_size_small">36dp</dimen>
+    <dimen name="upload_btn_width">108dp</dimen>
+    <dimen name="drawer_width">260dp</dimen>
+    <dimen name="fab_margin">4dp</dimen>
+    <dimen name="comment_list_height">340dp</dimen>
+    <dimen name="comment_dialog_divider_margin">16dp</dimen>
+    <dimen name="comment_profile_image_size">64dp</dimen>
+    <dimen name="ratingbar_margin_bottom">16dp</dimen>
+    <dimen name="ratingbar_height">36dp</dimen>
 
 </resources>

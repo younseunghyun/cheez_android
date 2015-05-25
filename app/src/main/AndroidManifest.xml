@@ -53,6 +53,9 @@
             android:name=".activity.SavedPostListActivity"
             android:label="@string/title_activity_saved_post_list" >
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="da84c0dd60259292d68c1a3b1cec901461f8a230" />
     </application>
 
 </manifest>

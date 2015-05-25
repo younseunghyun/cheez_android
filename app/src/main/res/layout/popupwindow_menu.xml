@@ -11,18 +11,25 @@
     android:layout_alignParentRight="true"
     android:layout_alignParentBottom="true"
     android:background="@drawable/popup_background">
-    <Button
+    <ImageButton
         android:id="@+id/btn_report"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="@dimen/btn_size_normal"
+        android:layout_height="@dimen/btn_size_normal"
+        android:src="@drawable/btn_report"/>
+    <ImageButton
         android:id="@+id/btn_show_tags"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="@dimen/btn_size_normal"
+        android:layout_height="@dimen/btn_size_normal"
+        android:src="@drawable/btn_tag"/>
     <ToggleButton
         android:id="@+id/tb_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:textOn=" "
+        android:textOff=" "
+        android:background="@drawable/togglebutton_save"
+        android:layout_width="@dimen/btn_size_normal"
+        android:layout_height="@dimen/btn_size_normal" />
 
 </LinearLayout>
 </RelativeLayout>

@@ -6,7 +6,6 @@ import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -18,7 +17,6 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -36,9 +34,9 @@ import co.cheez.cheez.App;
 import co.cheez.cheez.R;
 import co.cheez.cheez.activity.ContentViewActivity;
 import co.cheez.cheez.activity.ProfileActivity;
-import co.cheez.cheez.automation.view.ContentPopupMenu;
 import co.cheez.cheez.automation.view.DeclareView;
 import co.cheez.cheez.automation.view.ScrollObservableWebView;
+import co.cheez.cheez.dialog.CommentDialog;
 import co.cheez.cheez.http.AuthorizedRequest;
 import co.cheez.cheez.http.listener.DefaultErrorListener;
 import co.cheez.cheez.http.listener.DefaultListener;
@@ -90,13 +88,13 @@ public class ContentViewFragment extends BaseFragment
     private RelativeLayout mBaseContentsLayout;
 
     @DeclareView(id = R.id.btn_comment, click = "this")
-    private Button commentButton;
+    private View commentButton;
 
     @DeclareView(id = R.id.btn_share, click = "this")
-    private Button shareButton;
+    private View shareButton;
 
     @DeclareView(id = R.id.btn_menu, click = "this")
-    private Button menuButton;
+    private View menuButton;
 
     @DeclareView(id = R.id.ratingbar)
     private RatingBar ratingBar;
@@ -119,10 +117,10 @@ public class ContentViewFragment extends BaseFragment
     private int mDragViewHeight;
     private int mSmallDragViewHeight;
 
-    private PopupMenu mPopupMenu;
     private PopupWindow mMenuPopupWindow;
     private View mContentView;
     private int mContentMenuMaxTop;
+    private CommentDialog mCommentDialog;
 
 
     public static BaseFragment newInstance(int position) {
@@ -228,9 +226,7 @@ public class ContentViewFragment extends BaseFragment
             }
         });
 
-        // set popup menu
-        mPopupMenu = new ContentPopupMenu(getActivity(), menuButton, mPost.getId());
-
+        mCommentDialog = new CommentDialog(getActivity()).setPostId(mPost.getId());
 
         calculateViewSizes();
         mBaseContentsLayout.setOnTouchListener(new PanelSlideUpTouchListener(mSlidingLayout));
@@ -447,7 +443,7 @@ public class ContentViewFragment extends BaseFragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_comment:
-
+                mCommentDialog.getDialog().show();
                 break;
             case R.id.btn_share:
 

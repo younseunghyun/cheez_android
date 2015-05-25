@@ -95,7 +95,6 @@
             android:layout_alignParentRight="true"
             android:background="@drawable/primary_button_background"
             android:textColor="@color/text_menu"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"
             android:minWidth="0dp"
             android:minHeight="0dp"

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -113,34 +113,59 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:clipToPadding="false"
+
         android:padding="@dimen/padding_content_menu"
         >
         <RatingBar
             android:id="@+id/ratingbar"
             android:numStars="5"
             android:stepSize="0.5"
+            style="@style/cheezRatingBar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
+            android:layout_height="@dimen/ratingbar_height"
+            android:layout_alignParentBottom="true"
+            />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/fab_margin"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true">
-            <Button
+            <com.melnykov.fab.FloatingActionButton
                 android:id="@+id/btn_comment"
-                android:layout_width="@dimen/btn_size_normal"
-                android:layout_height="@dimen/btn_size_normal" />
-            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/btn_comment"
+                fab:fab_type="mini"
+                fab:fab_colorNormal="@color/theme_primary"
+                fab:fab_colorPressed="@color/theme_primary_dark"
+                fab:fab_colorRipple="@color/theme_primary_dark" />
+            <com.melnykov.fab.FloatingActionButton
                 android:id="@+id/btn_share"
-                android:layout_width="@dimen/btn_size_normal"
-                android:layout_height="@dimen/btn_size_normal" />
-            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/btn_share"
+                fab:fab_type="mini"
+                fab:fab_colorNormal="@color/theme_primary"
+                fab:fab_colorPressed="@color/theme_primary_dark"
+                fab:fab_colorRipple="@color/theme_primary_dark" />
+            <com.melnykov.fab.FloatingActionButton
                 android:id="@+id/btn_menu"
-                android:layout_width="@dimen/btn_size_normal"
-                android:layout_height="@dimen/btn_size_normal" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/btn_more"
+                fab:fab_type="mini"
+                fab:fab_colorNormal="@color/theme_primary"
+                fab:fab_colorPressed="@color/theme_primary_dark"
+                fab:fab_colorRipple="@color/theme_primary_dark" />
+
         </LinearLayout>
     </RelativeLayout>
 

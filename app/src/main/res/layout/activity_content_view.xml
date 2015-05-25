@@ -49,7 +49,7 @@
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/ll_drawer"
-        android:layout_width="240dp"
+        android:layout_width="@dimen/drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:orientation="vertical"
@@ -67,14 +67,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/margin_drawer_items"
             android:textColor="@color/text_menu"
             android:text="@string/label_upload_cheez"/>
         <Button
             android:id="@+id/btn_upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/upload_btn_width"
+            android:layout_height="@dimen/btn_size_normal"
             android:layout_gravity="center_horizontal"
-            android:text="UPLOAD"/>
+            android:background="@drawable/btn_upload"/>
 
         <View
             android:layout_marginTop="@dimen/margin_drawer_items"

@@ -9,9 +9,9 @@ import android.support.v7.app.ActionBarActivity;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import co.cheez.cheez.R;
 import co.cheez.cheez.automation.lifecycle.LifecycleObservable;
 import co.cheez.cheez.automation.lifecycle.LifecycleObserver;
+import co.cheez.cheez.util.DialogUtil;
 
 
 public abstract class BaseActivity extends ActionBarActivity
@@ -51,20 +51,12 @@ public abstract class BaseActivity extends ActionBarActivity
     }
 
     protected void showProgressDialog(boolean cancellable) {
-        showProgressDialog(R.string.app_name,
-                R.string.message_progress_default,
-                cancellable);
-    }
-
-    protected void showProgressDialog(int titleResourceId, int messageResourceId, boolean cancellable) {
         if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-        } else if (mProgressDialog.isShowing()) {
-            return;
+            mProgressDialog = DialogUtil.getProgressDialog(
+                    this,
+                    cancellable
+            );
         }
-        mProgressDialog.setTitle(titleResourceId);
-        mProgressDialog.setMessage(getString(messageResourceId));
-        mProgressDialog.setCancelable(cancellable);
         mProgressDialog.show();
     }
 

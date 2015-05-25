@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -79,6 +80,9 @@ public class ContentViewActivity extends BaseActivity
     @DeclareView(id = R.id.btn_show_saved_contents, click = "this")
     View mShowSavedPostsButton;
 
+    @DeclareView(id = R.id.tv_drawer_username)
+    TextView mDrawerUsernameLabel;
+
 
     private boolean waintingResponse = false;
     private int nextPage = 1;
@@ -120,6 +124,7 @@ public class ContentViewActivity extends BaseActivity
         ImageDisplayUtil.displayImage(
                 "drawable://" + R.drawable.ic_launcher,
                 mDrawerProfileImageView);
+        mDrawerUsernameLabel.setText(Auth.getInstance().getUser().getDisplayName());
 
         requestPostList();
     }

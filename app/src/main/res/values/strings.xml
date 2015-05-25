@@ -29,4 +29,9 @@
     <string name="title_saved_cheez_list">저장한 치즈</string>
     <string name="label_empty_saved_post">저장된 치즈가 없어요 :(</string>
     <string name="label_show_bookmark">북마크 보기</string>
+    <string name="label_comment">댓글</string>
+    <string name="hint_comment_input">댓글을 입력해주세요</string>
+    <string name="label_comment_submit">게시</string>
+    <string name="message_comment_required">내용을 입력해주세요</string>
+    <string name="label_comment_empty">아직 댓글이 없어요 :(</string>
 </resources>

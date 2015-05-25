@@ -22,4 +22,11 @@
     </style>
 
     <color name="theme_primary_dark">#FFC900</color>
+
+    <style name="cheezRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_progress</item>
+        <item name="android:minHeight">24dip</item>
+        <item name="android:maxHeight">36dip</item>
+    </style>
+
 </resources>
