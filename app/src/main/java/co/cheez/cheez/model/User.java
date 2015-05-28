@@ -17,7 +17,7 @@ public class User {
     private long uploadCount;
     private boolean following;
     private String name;
-    private String imageUrl;
+    private String profileImage;
 
     public static User fromJsonObject(JSONObject object) {
         return fromJsonString(object.toString());
@@ -73,19 +73,19 @@ public class User {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getProfileImage() {
+        return profileImage;
     }
 
     public String getDisplayImageUrl() {
-        if (imageUrl == null) {
+        if (profileImage == null) {
             return "drawable://" + R.drawable.ic_launcher;
         }
-        return imageUrl;
+        return profileImage;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     public long getUploadCount() {

@@ -41,6 +41,7 @@ public interface Constants {
         String REASON = "reason";
         String SAVED = "saved";
         String COMMENT = "comment";
+        String DATA = "data";
     }
 
     interface URLs {

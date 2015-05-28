@@ -28,6 +28,7 @@ import co.cheez.cheez.adapter.ContentViewPagerAdapter;
 import co.cheez.cheez.auth.Auth;
 import co.cheez.cheez.automation.view.DeclareView;
 import co.cheez.cheez.automation.view.ViewMapper;
+import co.cheez.cheez.event.PostReadEvent;
 import co.cheez.cheez.fragment.BaseFragment;
 import co.cheez.cheez.fragment.ContentViewFragment;
 import co.cheez.cheez.http.AuthorizedRequest;
@@ -41,11 +42,14 @@ import co.cheez.cheez.util.ImageDisplayUtil;
 import co.cheez.cheez.util.MessageUtil;
 import co.cheez.cheez.util.ViewAnimateUtil;
 import co.cheez.cheez.view.ContentViewPager;
+import de.greenrobot.event.EventBus;
 
 
 public class ContentViewActivity extends BaseActivity
         implements ViewPager.OnPageChangeListener, View.OnClickListener {
     private static final int LOAD_OFFSET = 2;
+
+    private JSONArray mReadPostLog;
 
     ContentViewPagerAdapter mContentViewPagerAdapter;
 
@@ -88,6 +92,12 @@ public class ContentViewActivity extends BaseActivity
 
     private boolean waintingResponse = false;
     private int nextPage = 1;
+
+    public ContentViewActivity() {
+        super();
+        mReadPostLog = new JSONArray();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,6 +269,9 @@ public class ContentViewActivity extends BaseActivity
     }
 
 
+    public void onEvent(PostReadEvent event) {
+        mReadPostLog.put(event.data);
+    }
 
     @Override
     protected void onResume() {
@@ -266,6 +279,45 @@ public class ContentViewActivity extends BaseActivity
             mContentViewPagerAdapter.notifyDataSetChanged();
         }
         super.onResume();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        EventBus.getDefault().unregister(this);
+        if (mReadPostLog.length() > 0) {
+            try {
+                JSONObject params = new JSONObject()
+                        .put(Constants.Keys.DATA, mReadPostLog);
+
+                // send request
+                Request request = new AuthorizedRequest(
+                        Request.Method.POST,
+                        Constants.URLs.READ_POST,
+                        params,
+                        new DefaultListener() {
+                            @Overridef
+                            public void onResponse(JSONObject response) {
+                                super.onResponse(response);
+                                mReadPostLog = new JSONArray();
+                            }
+                        },
+                        new DefaultErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                super.onErrorResponse(error);
+                                mReadPostLog = new JSONArray();
+                            }
+                        });
+                App.addRequest(request);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        super.onPause();
     }
 
     @Override
@@ -344,4 +396,6 @@ public class ContentViewActivity extends BaseActivity
                 break;
         }
     }
+
+
 }

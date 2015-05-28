@@ -24,22 +24,18 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.pkmmte.view.CircularImageView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.json.JSONObject;
 
-import co.cheez.cheez.App;
 import co.cheez.cheez.R;
 import co.cheez.cheez.activity.ContentViewActivity;
 import co.cheez.cheez.activity.ProfileActivity;
 import co.cheez.cheez.automation.view.DeclareView;
 import co.cheez.cheez.automation.view.ScrollObservableWebView;
 import co.cheez.cheez.dialog.CommentDialog;
-import co.cheez.cheez.http.AuthorizedRequest;
-import co.cheez.cheez.http.listener.DefaultErrorListener;
-import co.cheez.cheez.http.listener.DefaultListener;
+import co.cheez.cheez.event.PostReadEvent;
 import co.cheez.cheez.model.Post;
 import co.cheez.cheez.model.PostDataManager;
 import co.cheez.cheez.util.Constants;
@@ -48,6 +44,7 @@ import co.cheez.cheez.util.ImageDisplayUtil;
 import co.cheez.cheez.util.ViewAnimateUtil;
 import co.cheez.cheez.view.listener.ContentMenuItemClickListener;
 import co.cheez.cheez.view.listener.PanelSlideUpTouchListener;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by jiho on 5/13/15.
@@ -391,14 +388,7 @@ public class ContentViewFragment extends BaseFragment
                     .put(Constants.Keys.RATING, ratingBar.getRating())
                     .put(Constants.Keys.SAVED, mPost.isSaved())
                     .put(Constants.Keys.LINK_CLICKED, mLinkClicked);
-            Request request = new AuthorizedRequest(
-                    Request.Method.POST,
-                    Constants.URLs.READ_POST,
-                    params,
-                    new DefaultListener(),
-                    new DefaultErrorListener()
-            );
-            App.addRequest(request);
+            EventBus.getDefault().post(new PostReadEvent(params));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -450,7 +440,8 @@ public class ContentViewFragment extends BaseFragment
         //*/
 
         // 팝업 메뉴 열려있는 경우
-        if (mMenuPopupWindow.isShowing()) {
+        if (mMenuPopupWindow != null
+                && mMenuPopupWindow.isShowing()) {
             mMenuPopupWindow.dismiss();
             return true;
         }
