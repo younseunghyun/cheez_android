@@ -35,5 +35,6 @@
     <dimen name="comment_profile_image_size">64dp</dimen>
     <dimen name="ratingbar_margin_bottom">16dp</dimen>
     <dimen name="ratingbar_height">36dp</dimen>
+    <dimen name="webview_control_divider_margin">4dp</dimen>
 
 </resources>

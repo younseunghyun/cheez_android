@@ -1,6 +1,7 @@
 package co.cheez.cheez.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
@@ -105,6 +106,19 @@ public class ContentViewFragment extends BaseFragment
     @DeclareView(id = R.id.tv_username)
     private TextView mUsernameLabel;
 
+    @DeclareView(id = R.id.ll_btnset_webview_control)
+    private View mWebviewControlButtonset;
+
+    @DeclareView(id = R.id.btn_webview_go_back, click = "this")
+    private View mGoBackButton;
+
+    @DeclareView(id = R.id.btn_webview_go_forward, click = "this")
+    private View mGoForwardButton;
+
+    @DeclareView(id = R.id.btn_close_panel, click = "this")
+    private View mClosePanelButton;
+
+
     private float mTitleTextSize;
     private float mSubtitleTextSize;
     private float mSmallTitleTextSize;
@@ -193,6 +207,24 @@ public class ContentViewFragment extends BaseFragment
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return true;
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                /*)
+                if (view.canGoBack()) {
+                    mGoBackButton.setVisibility(View.VISIBLE);
+                } else {
+                    mGoBackButton.setVisibility(View.GONE);
+                }
+
+                if (view.canGoForward()) {
+                    mGoForwardButton.setVisibility(View.VISIBLE);
+                } else {
+                    mGoForwardButton.setVisibility(View.GONE);
+                }
+                //*/
             }
         });
 
@@ -323,7 +355,14 @@ public class ContentViewFragment extends BaseFragment
 
     private void setDragViewState(SlidingUpPanelLayout.PanelState state) {
         if (state == SlidingUpPanelLayout.PanelState.EXPANDED) {
-
+            /*
+            if (mContentWebView.canGoBack()) {
+                mGoBackButton.setVisibility(View.VISIBLE);
+            }
+            if (mContentWebView.canGoForward()) {
+                mGoForwardButton.setVisibility(View.VISIBLE);
+            }
+            //*/
 
             ViewAnimateUtil.animateTextColor(
                     mTitleLabel,
@@ -347,6 +386,8 @@ public class ContentViewFragment extends BaseFragment
                     null
             );
         } else if (state == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+            mGoBackButton.setVisibility(View.GONE);
+            mGoForwardButton.setVisibility(View.GONE);
             ViewAnimateUtil.animateTextColor(
                     mTitleLabel,
                     mTitleLabel.getCurrentTextColor(),
@@ -428,7 +469,11 @@ public class ContentViewFragment extends BaseFragment
         // webview 열려있는 경우
         if (mSlidingLayout != null
                 && mSlidingLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-            mSlidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            if (mContentWebView.canGoBack()) {
+                mContentWebView.goBack();
+            } else {
+                mSlidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
             return true;
         }
 
@@ -464,6 +509,19 @@ public class ContentViewFragment extends BaseFragment
             case R.id.iv_user_profile:
                 Intent intent = ProfileActivity.getIntentWithUserId(getActivity(), mPost.getUser().getId());
                 getActivity().startActivity(intent);
+                break;
+            case R.id.btn_close_panel:
+                hideSlideUpPanel();
+                break;
+            case R.id.btn_webview_go_back:
+                if (mContentWebView.canGoBack()) {
+                    mContentWebView.goBack();
+                }
+                break;
+            case R.id.btn_webview_go_forward:
+                if (mContentWebView.canGoForward()) {
+                    mContentWebView.goForward();
+                }
                 break;
         }
     }

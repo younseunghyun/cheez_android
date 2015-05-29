@@ -32,6 +32,7 @@
     <color name="text_dialog_title">#ffffff</color>
     <color name="input_border">#ebebeb</color>
     <color name="text_comment">#000000</color>
+    <color name="white_70">#b3ffffff</color>
 
 
 </resources>
