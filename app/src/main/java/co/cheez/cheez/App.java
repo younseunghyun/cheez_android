@@ -8,6 +8,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -16,7 +18,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
-import io.fabric.sdk.android.Fabric;
 import java.io.File;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -32,6 +33,7 @@ import javax.net.ssl.X509TrustManager;
 
 import co.cheez.cheez.util.Constants;
 import co.cheez.cheez.util.ViewAnimateUtil;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by jiho on 5/10/15.
@@ -44,6 +46,9 @@ public class App extends Application {
     private static RequestQueue mRequestQueue;
     private static DisplayImageOptions mDisplayImageOptions;
 
+    public static GoogleAnalytics analytics;
+    public static Tracker tracker;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -55,6 +60,20 @@ public class App extends Application {
 
         disableSSLCertificateChecking();
         initializeImageLoader();
+
+
+        // https://developers.google.com/analytics/devguides/collection/android/v4/
+        initializeTracker();
+    }
+
+    private void initializeTracker() {
+        analytics = GoogleAnalytics.getInstance(this);
+        analytics.setLocalDispatchPeriod(1800);
+
+        tracker = analytics.newTracker("UA-61908544-1"); // Replace with actual tracker/property Id
+        tracker.enableExceptionReporting(true);
+        tracker.enableAdvertisingIdCollection(true);
+        tracker.enableAutoActivityTracking(true);
     }
 
     public static Context getContext() {
