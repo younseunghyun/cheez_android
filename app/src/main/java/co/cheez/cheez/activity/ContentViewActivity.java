@@ -90,6 +90,9 @@ public class ContentViewActivity extends BaseActivity
     @DeclareView(id = R.id.tv_drawer_username)
     TextView mDrawerUsernameLabel;
 
+    @DeclareView(id = R.id.progress_post_list_loading)
+    View mPostListLoadingProgressBar;
+
 
     private boolean waintingResponse = false;
     private int nextPage = 1;
@@ -127,6 +130,7 @@ public class ContentViewActivity extends BaseActivity
 
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mContentViewPagerAdapter);
+        mViewPager.setOffscreenPageLimit(1);
         mViewPager.setSwipeEnabledChecker(new ContentViewPager.SwipeEnabledChecker() {
             @Override
             public boolean isSwipeEnabled() {
@@ -170,6 +174,7 @@ public class ContentViewActivity extends BaseActivity
         if (waintingResponse) {
             return;
         }
+        mPostListLoadingProgressBar.setVisibility(View.VISIBLE);
 
         Request request = new AuthorizedRequest(
                 Request.Method.GET,
@@ -206,7 +211,7 @@ public class ContentViewActivity extends BaseActivity
                             hideSplashView();
                             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                         }
-
+                        mPostListLoadingProgressBar.setVisibility(View.GONE);
 
                     }
                 },
@@ -214,6 +219,7 @@ public class ContentViewActivity extends BaseActivity
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         super.onErrorResponse(error);
+                        mPostListLoadingProgressBar.setVisibility(View.GONE);
                         MessageUtil.showDefaultErrorMessage();
                         waintingResponse = false;
                     }

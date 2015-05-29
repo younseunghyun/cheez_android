@@ -1,6 +1,8 @@
 package co.cheez.cheez.fragment;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import org.json.JSONObject;
 import co.cheez.cheez.App;
 import co.cheez.cheez.R;
 import co.cheez.cheez.activity.BaseActivity;
+import co.cheez.cheez.adapter.ImageListAdapter;
 import co.cheez.cheez.automation.view.DeclareView;
 import co.cheez.cheez.http.AuthorizedRequest;
 import co.cheez.cheez.http.listener.DefaultErrorListener;
@@ -34,9 +37,6 @@ public class ContentUploadFragment extends BaseFragment implements View.OnClickL
     @DeclareView(id = R.id.et_url)
     private EditText urlInput;
 
-    @DeclareView(id = R.id.btn_request_og, click = "this")
-    private Button requestOGButton;
-
     @DeclareView(id = R.id.et_title)
     private EditText titleInput;
 
@@ -49,8 +49,18 @@ public class ContentUploadFragment extends BaseFragment implements View.OnClickL
     @DeclareView(id = R.id.iv_content_main)
     private ImageView contentMainImageView;
 
+    @DeclareView(id = R.id.btn_finish, click = "this")
+    private View mFinishButton;
+
     @DeclareView(id = R.id.btn_submit, click = "this")
     private Button submitButton;
+
+    @DeclareView(id = R.id.rv_url_image_list)
+    private RecyclerView mImageListRecyclerView;
+
+    private LinearLayoutManager mLinearLayoutManager;
+    private ImageListAdapter mAdapter;
+
 
     @Override
     public int getLayoutResourceId() {
@@ -63,7 +73,36 @@ public class ContentUploadFragment extends BaseFragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View contentView = super.onCreateView(inflater, container, savedInstanceState);
 
+        mLinearLayoutManager = new LinearLayoutManager(
+                getActivity(),
+                LinearLayoutManager.HORIZONTAL,
+                false);
+        mImageListRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mAdapter = new ImageListAdapter();
+        mImageListRecyclerView.setAdapter(mAdapter);
 
+
+        urlInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (!hasFocus) {
+                    String newUrl = urlInput.getText().toString();
+                    if (newUrl.length() == 0) {
+                        return;
+                    }
+
+                    if (mSelectedImageUrl == null || !newUrl.equals(mSelectedImageUrl)) {
+                        mSelectedImageUrl = newUrl;
+                        try {
+                            getOgData(newUrl);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
 
         return contentView;
     }
@@ -96,7 +135,11 @@ public class ContentUploadFragment extends BaseFragment implements View.OnClickL
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         super.onErrorResponse(error);
-                        ((BaseActivity)getActivity()).hideProgressDialog();
+                        ((BaseActivity) getActivity()).hideProgressDialog();
+                        MessageUtil.showMessage(R.string.error_invalid_url);
+                        mSelectedImageUrl = null;
+                        urlInput.requestFocus();
+                        urlInput.selectAll();
                     }
                 }
         );
@@ -107,17 +150,12 @@ public class ContentUploadFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_request_og:
-                try {
-                    getOgData(urlInput.getText().toString());
-                } catch (JSONException e) {
-                    MessageUtil.showDefaultErrorMessage();
-                    e.printStackTrace();
-                }
-                break;
             case R.id.btn_submit:
                 sendWritePostRequest();
 
+                break;
+            case R.id.btn_finish:
+                getActivity().finish();
                 break;
         }
     }

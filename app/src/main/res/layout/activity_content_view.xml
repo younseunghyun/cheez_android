@@ -35,6 +35,15 @@
                 android:layout_centerInParent="true"
                 android:src="@drawable/logo_toolbar"
                 />
+
+            <ProgressBar
+                android:id="@+id/progress_post_list_loading"
+                style="@android:style/Widget.DeviceDefault.ProgressBar.Small"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="@dimen/btn_size_normal"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <ImageView

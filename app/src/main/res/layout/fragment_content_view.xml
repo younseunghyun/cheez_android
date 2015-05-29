@@ -21,14 +21,25 @@
             android:layout_height="match_parent"
             >
             <include layout="@layout/toolbar_default" />
+            <RelativeLayout
+                android:layout_below="@+id/toolbar_default"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
             <ImageView
                 android:id="@+id/iv_content_image"
-                android:layout_below="@+id/toolbar_default"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
                 android:scaleType="centerCrop"
                 />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/content_image_foreground"
+                    />
+
+            </RelativeLayout>
             <LinearLayout
                 android:id="@+id/ll_profile_area"
                 android:layout_width="wrap_content"
@@ -103,10 +114,11 @@
 
                         <TextView
                             android:id="@+id/tv_title"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
                             android:textColor="@color/text_title"
                             android:singleLine="true"
+                            android:textStyle="bold"
                             android:ellipsize="end"
+                            android:textSize="@dimen/contentview_title_size"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             />
@@ -115,6 +127,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:singleLine="true"
                             android:ellipsize="end"
+                            android:textSize="@dimen/contentview_subtitle_size"
                             android:textColor="@color/text_subtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -158,7 +171,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:clipToPadding="false"
-
         android:padding="@dimen/padding_content_menu"
         >
         <RatingBar

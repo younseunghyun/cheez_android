@@ -39,4 +39,15 @@
     <string name="btn_facebook_login">페이스북으로 로그인하기</string>
     <string name="btn_skip_login">나중에 하기</string>
     <string name="button_skip_tutorial"><![CDATA[바로 로그인하기 >>]]></string>
+    <string name="label_link">링크</string>
+    <string name="label_select_main_image">대표이미지 설정</string>
+    <string name="label_title">제목</string>
+    <string name="label_description">설명</string>
+    <string name="hint_tag">태그는 공백으로 구분해주세요</string>
+    <string name="label_tag">태그</string>
+    <string name="label_upload_submit">업로드하기</string>
+    <string name="label_upload_title">업로드하기</string>
+    <string name="error_invalid_url">잘못된 URL이에요 :(</string>
+    <string name="message_prepare">준비중이에용 ლ(ʘ▽ʘ)ლ</string>
+
 </resources>

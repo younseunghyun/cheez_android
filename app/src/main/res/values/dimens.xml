@@ -41,5 +41,11 @@
     <dimen name="margin_login_button">16dp</dimen>
     <dimen name="login_btnset_top_margin">100dp</dimen>
     <dimen name="viewpager_indicator_bottom_margin">56dp</dimen>
+    <dimen name="content_upload_fragment_padding">16dp</dimen>
+    <dimen name="upload_input_vertical_margin">8dp</dimen>
+    <dimen name="upload_input_height">32dp</dimen>
+    <dimen name="upload_image_view_size">64dp</dimen>
+    <dimen name="contentview_title_size">20sp</dimen>
+    <dimen name="contentview_subtitle_size">18sp</dimen>
 
 </resources>

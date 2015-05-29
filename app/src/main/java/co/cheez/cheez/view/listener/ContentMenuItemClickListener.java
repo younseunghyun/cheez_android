@@ -37,10 +37,9 @@ public class ContentMenuItemClickListener
         switch (v.getId()) {
             case R.id.btn_report:
                 showReportDialog(v);
-
                 break;
             case R.id.btn_show_tags:
-
+                MessageUtil.showMessage(R.string.message_prepare);
                 break;
         }
     }

@@ -16,8 +16,10 @@ public class ImageDisplayUtil {
         if (imageUri.endsWith(".gif")) {
             Glide.with(App.getContext())
                     .load(imageUri)
-                    .crossFade()
+                    .asGif()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .crossFade()
+                    .fitCenter()
                     .into(targetImageView);
         } else {
             ImageLoader.getInstance().displayImage(
