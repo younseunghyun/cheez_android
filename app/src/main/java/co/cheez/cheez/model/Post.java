@@ -46,6 +46,13 @@ public class Post {
         return post;
     }
 
+    public String toJsonString() {
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create();
+        return gson.toJson(this);
+    }
+
     public long getId() {
         return id;
     }

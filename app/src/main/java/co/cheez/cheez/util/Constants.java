@@ -54,5 +54,6 @@ public interface Constants {
         String REPORT = BASE + "report/";
         String SAVED_POST = BASE + "saved-post/";
         String COMMENT = BASE + "comment/";
+        String SHARE = "http://bite.cheez.co/";
     }
 }

@@ -1,68 +1,43 @@
 package co.cheez.cheez.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
+import com.viewpagerindicator.CirclePageIndicator;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Arrays;
 import java.util.Locale;
 
-import co.cheez.cheez.App;
 import co.cheez.cheez.R;
-import co.cheez.cheez.auth.Auth;
 import co.cheez.cheez.automation.view.DeclareView;
 import co.cheez.cheez.automation.view.ViewMapper;
-import co.cheez.cheez.http.listener.DefaultErrorListener;
-import co.cheez.cheez.http.listener.DefaultListener;
-import co.cheez.cheez.model.User;
-import co.cheez.cheez.util.Constants;
-import co.cheez.cheez.util.DeviceUtil;
-import co.cheez.cheez.util.MessageUtil;
+import co.cheez.cheez.fragment.LoginFragment;
+import co.cheez.cheez.fragment.TutorialFragment;
+import co.cheez.cheez.util.ViewAnimateUtil;
 
-public class AuthActivity extends BaseActivity implements View.OnClickListener, FacebookCallback<LoginResult> {
+public class AuthActivity extends BaseActivity implements View.OnClickListener {
 
     SectionsPagerAdapter mSectionsPagerAdapter;
 
     @DeclareView(id = R.id.pager)
     ViewPager mViewPager;
 
-    @DeclareView(id = R.id.btn_fb_login, click = "this")
-    Button mFacebookLoginButton;
+    @DeclareView(id = R.id.indicator)
+    CirclePageIndicator mPageIndicator;
 
-    @DeclareView(id = R.id.btn_skip_login, click = "this")
-    Button mSkipLoginButton;
-
-    CallbackManager mFacebookCallbackManager;
+    @DeclareView(id = R.id.btn_skip_tutorial, click = "this")
+    View mSkipTutorialButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupFacebookSdk();
+        FacebookSdk.sdkInitialize(this);
 
         setContentView(ViewMapper.inflateLayout(this, this, R.layout.activity_auth));
 
@@ -72,176 +47,51 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener, 
 
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mPageIndicator.setFillColor(getResources().getColor(R.color.theme_primary));
+        mPageIndicator.setViewPager(mViewPager);
+        mPageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-    }
+            }
 
-    private void setupFacebookSdk() {
-        // setting up facebook sdk
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        mFacebookCallbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(mFacebookCallbackManager, this);
-    }
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 4) {
+                    ViewAnimateUtil.animateAlpha(
+                            mSkipTutorialButton,
+                            mSkipTutorialButton.getAlpha(), 0f,
+                            ViewAnimateUtil.ANIMATION_DURATION_DEFAULT,
+                            null
+                    );
 
-    private void facebookLogin() {
-        String[] permissions = {"public_profile", "email"};
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(permissions));
+                } else {
+                    ViewAnimateUtil.animateAlpha(
+                            mSkipTutorialButton,
+                            mSkipTutorialButton.getAlpha(), 1f,
+                            ViewAnimateUtil.ANIMATION_DURATION_DEFAULT,
+                            null
+                    );
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_skip_login:
-                try {
-                    JSONArray devices = new JSONArray()
-                            .put(DeviceUtil.getDeviceInfo());
-                    JSONObject params = new JSONObject()
-                            .put(Constants.Keys.DEVICES, devices);
-                    sendSignupRequest(params);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    MessageUtil.showDefaultErrorMessage();
-                }
-                break;
-            case R.id.btn_fb_login:
-                facebookLogin();
+            case R.id.btn_skip_tutorial:
+                mViewPager.setCurrentItem(4);
                 break;
         }
     }
 
-    private void sendSignupRequest(JSONObject params) {
-        Request request = new JsonObjectRequest(
-                Request.Method.POST,
-                Constants.URLs.USER,
-                params,
-                new DefaultListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        super.onResponse(response);
-                        User user = User.fromJsonObject(response);
-                        Auth.getInstance().setUser(user);
-                        try {
-                            JSONObject params = new JSONObject()
-                                    .put(Constants.Keys.DEVICE, DeviceUtil.getDeviceInfo());
-                            sendAuthTokenRequest(params);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            MessageUtil.showMessage(R.string.error_default);
-                        }
-                        hideProgressDialog();
-                    }
-                },
-                new DefaultErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        super.onErrorResponse(error);
-                        Log.e("error", error.toString());
-                        MessageUtil.showDefaultErrorMessage();
-                        hideProgressDialog();
-                    }
-                }
-        );
-        showProgressDialog();
-        App.addRequest(request);
-    }
-
-    private void sendAuthTokenRequest(JSONObject params) {
-        Request request = new JsonObjectRequest(
-                Request.Method.POST,
-                Constants.URLs.AUTH_TOKEN,
-                params,
-                new DefaultListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        super.onResponse(response);
-                        hideProgressDialog();
-                        try {
-                            String token = response.getString(Constants.Keys.TOKEN);
-                            Auth.getInstance().setAuthToken(token);
-                            Intent intent = BaseActivity.getIntent(
-                                    AuthActivity.this,
-                                    ContentViewActivity.class,
-                                    null,
-                                    IntentCompat.FLAG_ACTIVITY_CLEAR_TASK
-                                            |Intent.FLAG_ACTIVITY_NEW_TASK
-                                    );
-                            startActivity(intent);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            MessageUtil.showDefaultErrorMessage();
-                        }
-                    }
-                },
-                new DefaultErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        super.onErrorResponse(error);
-                        hideProgressDialog();
-                    }
-                }
-        );
-        showProgressDialog();
-        App.addRequest(request);
-    }
-
-    // facebook login callback
-    @Override
-    public void onSuccess(LoginResult loginResult) {
-        GraphRequest request = GraphRequest.newMeRequest(
-                loginResult.getAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(
-                            JSONObject object,
-                            GraphResponse response) {
-                        // Application code
-                        hideProgressDialog();
-
-                        try {
-                            JSONObject snsAccountData = new JSONObject()
-                                    .put(Constants.Keys.SNS_USER_ID, object.get("id"))
-                                    .put(Constants.Keys.SNS_TYPE, Constants.Integers.SNS_TYPE_FACEBOOK)
-                                    .put(Constants.Keys.SNS_PROFILE_URL, "https://www.facebook.com/" + object.get("id"));
-                            JSONArray snsAccounts = new JSONArray().put(snsAccountData);
-                            JSONArray devices = new JSONArray().put(DeviceUtil.getDeviceInfo());
-                            JSONObject userData = new JSONObject()
-                                    .put(Constants.Keys.NAME, object.get("name"))
-                                    .put(Constants.Keys.EMAIL, object.get("email"))
-                                    .put(Constants.Keys.DEVICES, devices)
-                                    .put(Constants.Keys.SNS_ACCOUNTS, snsAccounts);
-
-                            sendSignupRequest(userData);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            MessageUtil.showDefaultErrorMessage();
-                        }
-
-                        // TODO : send request to cheez server
-                    }
-                });
-        Bundle parameters = new Bundle();
-        showProgressDialog();
-        parameters.putString("fields", "id,name,email");
-        request.setParameters(parameters);
-        request.executeAsync();
-    }
-
-    @Override
-    public void onCancel() {
-
-    }
-
-    @Override
-    public void onError(FacebookException e) {
-        MessageUtil.showDefaultErrorMessage();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
-    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -255,15 +105,16 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener, 
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            if (position < 4) {
+                return TutorialFragment.newInstance(getTutorialImageResId(position));
+            } else {
+                return new LoginFragment();
+            }
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return 5;
         }
 
         @Override
@@ -279,6 +130,20 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener, 
             }
             return null;
         }
+    }
+
+    private int getTutorialImageResId(int position) {
+        switch (position) {
+            case 0:
+                return R.drawable.tutorial1;
+            case 1:
+                return R.drawable.tutorial2;
+            case 2:
+                return R.drawable.tutorial3;
+            case 3:
+                return R.drawable.tutorial4;
+        }
+        return 0;
     }
 
     /**

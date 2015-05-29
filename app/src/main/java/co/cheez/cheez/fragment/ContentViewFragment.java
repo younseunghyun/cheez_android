@@ -7,7 +7,6 @@ import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -15,12 +14,15 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,12 +32,14 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.json.JSONObject;
 
+import java.util.concurrent.Callable;
+
 import co.cheez.cheez.R;
-import co.cheez.cheez.activity.ContentViewActivity;
 import co.cheez.cheez.activity.ProfileActivity;
 import co.cheez.cheez.automation.view.DeclareView;
 import co.cheez.cheez.automation.view.ScrollObservableWebView;
 import co.cheez.cheez.dialog.CommentDialog;
+import co.cheez.cheez.event.PanelStateChangedEvent;
 import co.cheez.cheez.event.PostReadEvent;
 import co.cheez.cheez.model.Post;
 import co.cheez.cheez.model.PostDataManager;
@@ -53,6 +57,7 @@ import de.greenrobot.event.EventBus;
 public class ContentViewFragment extends BaseFragment
         implements SlidingUpPanelLayout.PanelSlideListener, View.OnClickListener {
     public static final String KEY_POSITION = "position";
+
     private static final int TOOLBAR_HEIGHT_DP = 48;
     private boolean mSourcePageLoaded = false;
     private Post mPost;
@@ -118,6 +123,12 @@ public class ContentViewFragment extends BaseFragment
     @DeclareView(id = R.id.btn_close_panel, click = "this")
     private View mClosePanelButton;
 
+    @DeclareView(id = R.id.progress_content_loading)
+    private ProgressBar mContentLoadingProgressBar;
+
+    @DeclareView(id = R.id.iv_toolbar_logo)
+    private View mToolbarLogoImage;
+
 
     private float mTitleTextSize;
     private float mSubtitleTextSize;
@@ -147,8 +158,11 @@ public class ContentViewFragment extends BaseFragment
         mContentView = getContentView(getActivity(), getLayoutResourceId());
 
         Bundle args = getArguments();
-        int position = args.getInt(KEY_POSITION);
-        mPost = PostDataManager.getInstance().getPostAtPosition(position);
+        if (args != null && args.containsKey(KEY_POSITION)) {
+            int position = args.getInt(KEY_POSITION);
+            mToolbarLogoImage.setVisibility(View.GONE);
+            mPost = PostDataManager.getInstance().getPostAtPosition(position);
+        }
 
         if (mPost == null) {
             // 마지막까지 온 경우
@@ -199,7 +213,7 @@ public class ContentViewFragment extends BaseFragment
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
-                Log.e("progress", newProgress + "");
+                mContentLoadingProgressBar.setProgress(newProgress);
             }
         });
         mContentWebView.setWebViewClient(new WebViewClient() {
@@ -212,23 +226,40 @@ public class ContentViewFragment extends BaseFragment
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                /*)
-                if (view.canGoBack()) {
-                    mGoBackButton.setVisibility(View.VISIBLE);
-                } else {
-                    mGoBackButton.setVisibility(View.GONE);
-                }
+                mContentLoadingProgressBar.setVisibility(View.VISIBLE);
+                ViewAnimateUtil.animateAlpha(
+                        mContentLoadingProgressBar,
+                        0f, 1f,
+                        ViewAnimateUtil.ANIMATION_DURATION_DEFAULT,
+                        null);
 
-                if (view.canGoForward()) {
-                    mGoForwardButton.setVisibility(View.VISIBLE);
-                } else {
-                    mGoForwardButton.setVisibility(View.GONE);
-                }
-                //*/
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                ViewAnimateUtil.animateAlpha(
+                        mContentLoadingProgressBar,
+                        1f, 0f,
+                        ViewAnimateUtil.ANIMATION_DURATION_DEFAULT,
+                        new Callable() {
+                            @Override
+                            public Object call() throws Exception {
+                                mContentLoadingProgressBar.setVisibility(View.GONE);
+                                return null;
+                            }
+                        });
             }
         });
 
-        mContentWebView.getSettings().setJavaScriptEnabled(true);
+        WebSettings settings = mContentWebView.getSettings();
+        if (Build.VERSION.SDK_INT >= 21) {
+            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.setAcceptCookie(true);
+            cookieManager.setAcceptThirdPartyCookies(mContentWebView, true);
+        }
+        settings.setJavaScriptEnabled(true);
 
         // TODO : 정리..
         mContentWebView.setOnTouchListener(new View.OnTouchListener() {
@@ -250,7 +281,7 @@ public class ContentViewFragment extends BaseFragment
                             float dy = event.getY() - startY;
 
                             if (Math.abs(dy) > Math.abs(dx)
-                                && dy > offset) {
+                                    && dy > offset) {
                                 hideSlideUpPanel();
                             }
                             break;
@@ -275,6 +306,10 @@ public class ContentViewFragment extends BaseFragment
 //        });
 
         return mContentView;
+    }
+
+    public void setPost(Post post) {
+        mPost = post;
     }
 
 
@@ -337,7 +372,7 @@ public class ContentViewFragment extends BaseFragment
         mContentWebView.pauseTimers();
         mContentWebView.onPause();
         setDragViewState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        ((ContentViewActivity)getActivity()).showToolbar();
+        EventBus.getDefault().post(new PanelStateChangedEvent(SlidingUpPanelLayout.PanelState.COLLAPSED));
         mContentMenuWrapper.setTop(0);
     }
 
@@ -346,7 +381,7 @@ public class ContentViewFragment extends BaseFragment
         mContentWebView.onResume();
         mContentWebView.resumeTimers();
         setDragViewState(SlidingUpPanelLayout.PanelState.EXPANDED);
-        ((ContentViewActivity)getActivity()).hideToolbar(0);
+        EventBus.getDefault().post(new PanelStateChangedEvent(SlidingUpPanelLayout.PanelState.EXPANDED));
         mLinkClicked = true;
         if (!mSourcePageLoaded) {
             loadWebViewContents();
@@ -381,7 +416,7 @@ public class ContentViewFragment extends BaseFragment
             ViewAnimateUtil.animateBackgroundColor(
                     mDragView,
                     ((ColorDrawable)mDragView.getBackground()).getColor(),
-                    getResources().getColor(R.color.theme_secondary),
+                    getResources().getColor(R.color.theme_primary),
                     ViewAnimateUtil.ANIMATION_DURATION_DEFAULT,
                     null
             );
@@ -501,7 +536,7 @@ public class ContentViewFragment extends BaseFragment
                 mCommentDialog.getDialog().show();
                 break;
             case R.id.btn_share:
-
+                sharePost();
                 break;
             case R.id.btn_menu:
                 showPopupMenu();
@@ -524,6 +559,16 @@ public class ContentViewFragment extends BaseFragment
                 }
                 break;
         }
+    }
+
+    private void sharePost() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, mPost.getTitle());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.URLs.SHARE + mPost.getId());
+
+        startActivity(Intent.createChooser(shareIntent, null));
     }
 
     private void showPopupMenu() {
@@ -564,5 +609,6 @@ public class ContentViewFragment extends BaseFragment
         }
         mMenuPopupWindow.showAtLocation(mContentView, Gravity.NO_GRAVITY, 0, 0);
     }
+
 
 }

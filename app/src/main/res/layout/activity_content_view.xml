@@ -21,7 +21,7 @@
         <RelativeLayout
             android:id="@+id/rl_btnset_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_height">
+            android:layout_height="@dimen/toolbar_height" >
             <ImageButton
                 android:id="@+id/btn_drawer_toggle"
                 android:layout_width="@dimen/btn_size_normal"
@@ -34,7 +34,6 @@
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:src="@drawable/logo_toolbar"
-
                 />
         </RelativeLayout>
 

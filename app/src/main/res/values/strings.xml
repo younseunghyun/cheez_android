@@ -35,4 +35,8 @@
     <string name="message_comment_required">내용을 입력해주세요</string>
     <string name="label_comment_empty">아직 댓글이 없어요 :(</string>
     <string name="message_login_required">로그인해주세요</string>
+    <string name="title_activity_single_content_view">SingleContentViewActivity</string>
+    <string name="btn_facebook_login">페이스북으로 로그인하기</string>
+    <string name="btn_skip_login">나중에 하기</string>
+    <string name="button_skip_tutorial"><![CDATA[바로 로그인하기 >>]]></string>
 </resources>

@@ -28,6 +28,7 @@ import co.cheez.cheez.adapter.ContentViewPagerAdapter;
 import co.cheez.cheez.auth.Auth;
 import co.cheez.cheez.automation.view.DeclareView;
 import co.cheez.cheez.automation.view.ViewMapper;
+import co.cheez.cheez.event.PanelStateChangedEvent;
 import co.cheez.cheez.event.PostReadEvent;
 import co.cheez.cheez.fragment.BaseFragment;
 import co.cheez.cheez.fragment.ContentViewFragment;
@@ -273,24 +274,34 @@ public class ContentViewActivity extends BaseActivity
         mReadPostLog.put(event.data);
     }
 
+    public void onEvent(PanelStateChangedEvent event) {
+        switch (event.mPanelState) {
+            case EXPANDED:
+                hideToolbar(0);
+                break;
+            case COLLAPSED:
+                showToolbar();
+                break;
+        }
+    }
+
     @Override
     protected void onResume() {
         if (mContentViewPagerAdapter != null) {
             mContentViewPagerAdapter.notifyDataSetChanged();
         }
         super.onResume();
-
         EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onPause() {
+        super.onPause();
         EventBus.getDefault().unregister(this);
         if (mReadPostLog.length() > 0) {
             try {
                 JSONObject params = new JSONObject()
                         .put(Constants.Keys.DATA, mReadPostLog);
-
                 // send request
                 Request request = new AuthorizedRequest(
                         Request.Method.POST,
@@ -316,8 +327,6 @@ public class ContentViewActivity extends BaseActivity
             }
 
         }
-
-        super.onPause();
     }
 
     @Override
@@ -396,6 +405,8 @@ public class ContentViewActivity extends BaseActivity
                 break;
         }
     }
+
+
 
 
 }

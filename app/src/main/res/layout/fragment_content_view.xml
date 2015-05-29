@@ -56,7 +56,6 @@
                     android:shadowDx="0.0"
                     android:shadowDy="1.0"
                     android:shadowRadius="2.0"
-                    android:text="m_e_l_t_i_n_g"
                     />
             </LinearLayout>
         </RelativeLayout>
@@ -139,8 +138,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/text_subtitle"/>
-            <!--
-            this is sliding up panel -->
+            <ProgressBar
+                android:id="@+id/progress_content_loading"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:progressDrawable="@drawable/content_progress_bar"
+                android:visibility="gone"
+                android:max="100"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/progress_bar_width"
+                android:layout_below="@+id/rl_umano_panel_handle"
+                />
 
 
         </RelativeLayout>

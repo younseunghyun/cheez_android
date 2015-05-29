@@ -18,8 +18,8 @@
 
         <activity
             android:name=".activity.ContentViewActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,13 +28,13 @@
         </activity>
         <activity
             android:name=".activity.AuthActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_auth" >
+            android:label="@string/title_activity_auth"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activity.ContentUploadActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_content_upload" >
+            android:label="@string/title_activity_content_upload"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -44,25 +44,33 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name="com.facebook.FacebookActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ProfileActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_profile"
-            android:parentActivityName=".activity.ContentViewActivity" >
+            android:parentActivityName=".activity.ContentViewActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.cheez.cheez.activity.ContentViewActivity" />
         </activity>
         <activity
             android:name=".activity.SavedPostListActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_saved_post_list" >
+            android:label="@string/title_activity_saved_post_list"
+            android:screenOrientation="portrait" >
         </activity>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="da84c0dd60259292d68c1a3b1cec901461f8a230" />
+
+        <activity
+            android:name=".activity.SingleContentViewActivity"
+            android:label="@string/title_activity_single_content_view"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>
