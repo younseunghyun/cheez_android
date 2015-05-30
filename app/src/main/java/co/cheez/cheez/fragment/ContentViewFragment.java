@@ -255,6 +255,8 @@ public class ContentViewFragment extends BaseFragment
         });
 
         WebSettings settings = mContentWebView.getSettings();
+        settings.setLoadWithOverviewMode(true);
+        settings.setUseWideViewPort(true);
         if (Build.VERSION.SDK_INT >= 21) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
             CookieManager cookieManager = CookieManager.getInstance();
