@@ -68,6 +68,7 @@ public class ContentUploadFragment extends BaseFragment implements View.OnClickL
     }
 
     private String mSelectedImageUrl;
+    private String mSourceUrl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,8 +97,8 @@ public class ContentUploadFragment extends BaseFragment implements View.OnClickL
                         urlInput.setText(newUrl);
                     }
 
-                    if (mSelectedImageUrl == null || !newUrl.equals(mSelectedImageUrl)) {
-                        mSelectedImageUrl = newUrl;
+                    if (mSourceUrl == null || !newUrl.equals(mSourceUrl)) {
+                        mSourceUrl = newUrl;
                         try {
                             getOgData(newUrl);
                         } catch (JSONException e) {
@@ -238,6 +239,7 @@ public class ContentUploadFragment extends BaseFragment implements View.OnClickL
 
     public void setSourceUrl(String url) {
         urlInput.setText(url);
+        mSourceUrl = url;
         try {
             getOgData(url);
         } catch (JSONException e) {
