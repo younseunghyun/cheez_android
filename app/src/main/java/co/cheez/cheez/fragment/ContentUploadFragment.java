@@ -91,6 +91,10 @@ public class ContentUploadFragment extends BaseFragment implements View.OnClickL
                     if (newUrl.length() == 0) {
                         return;
                     }
+                    if (!newUrl.startsWith("http")) {
+                        newUrl = "http://" + newUrl;
+                        urlInput.setText(newUrl);
+                    }
 
                     if (mSelectedImageUrl == null || !newUrl.equals(mSelectedImageUrl)) {
                         mSelectedImageUrl = newUrl;
@@ -213,14 +217,18 @@ public class ContentUploadFragment extends BaseFragment implements View.OnClickL
                     @Override
                     public void onResponse(JSONObject response) {
                         super.onResponse(response);
+
                         ((BaseActivity)getActivity()).hideProgressDialog();
+                        MessageUtil.showMessage(R.string.message_upload_complete);
+                        getActivity().finish();
                     }
                 },
                 new DefaultErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         super.onErrorResponse(error);
-                        ((BaseActivity)getActivity()).hideProgressDialog();
+                        MessageUtil.showDefaultErrorMessage();
+                        ((BaseActivity) getActivity()).hideProgressDialog();
                     }
                 }
         );

@@ -49,5 +49,6 @@
     <string name="label_upload_title">업로드하기</string>
     <string name="error_invalid_url">잘못된 URL이에요 :(</string>
     <string name="message_prepare">준비중이에용 ლ(ʘ▽ʘ)ლ</string>
+    <string name="message_upload_complete">업로드되었습니다</string>
 
 </resources>
