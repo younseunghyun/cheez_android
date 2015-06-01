@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -34,7 +33,7 @@ import co.cheez.cheez.util.MessageUtil;
 public class SavedPostListFragment extends BaseFragment implements View.OnClickListener {
 
     @DeclareView(id = R.id.btn_finish, click = "this")
-    Button mFinishButton;
+    View mFinishButton;
 
     @DeclareView(id = R.id.rv_post_list)
     RecyclerView mPostListRecyclerView;

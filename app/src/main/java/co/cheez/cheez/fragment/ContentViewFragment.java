@@ -255,6 +255,8 @@ public class ContentViewFragment extends BaseFragment
         });
 
         WebSettings settings = mContentWebView.getSettings();
+
+        // 옆으로 화면 벗어나는 이미지 화면에 맞춤
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
         if (Build.VERSION.SDK_INT >= 21) {

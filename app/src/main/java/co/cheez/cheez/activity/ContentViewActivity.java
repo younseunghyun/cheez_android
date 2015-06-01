@@ -49,6 +49,7 @@ import de.greenrobot.event.EventBus;
 public class ContentViewActivity extends BaseActivity
         implements ViewPager.OnPageChangeListener, View.OnClickListener {
     private static final int LOAD_OFFSET = 2;
+    private static final int LOG_QUEUE_SIZE = 5;
 
     private JSONArray mReadPostLog;
 
@@ -164,9 +165,6 @@ public class ContentViewActivity extends BaseActivity
             mDrawerUsernameLabel.setText(getString(R.string.message_login_required));
         }
 
-
-
-
         requestPostList();
     }
 
@@ -199,7 +197,6 @@ public class ContentViewActivity extends BaseActivity
                                 waintingResponse = false;
                                 nextPage ++;
                             } else {
-                                // TODO : 결과 수가 0이면 다음 요청 추가로 보내지 않도록 막고 더미 포스트 추가하기
                                 PostDataManager.getInstance().append(null);
                             }
                         } catch (JSONException e) {
@@ -278,6 +275,10 @@ public class ContentViewActivity extends BaseActivity
 
     public void onEvent(PostReadEvent event) {
         mReadPostLog.put(event.data);
+        if (mReadPostLog.length() >= LOG_QUEUE_SIZE) {
+            sendReadPostLog();
+        }
+        
     }
 
     public void onEvent(PanelStateChangedEvent event) {
@@ -304,29 +305,23 @@ public class ContentViewActivity extends BaseActivity
     protected void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+        sendReadPostLog();
+    }
+
+    private void sendReadPostLog() {
         if (mReadPostLog.length() > 0) {
+            JSONArray readPostLog = mReadPostLog;
+            mReadPostLog = new JSONArray();
             try {
                 JSONObject params = new JSONObject()
-                        .put(Constants.Keys.DATA, mReadPostLog);
+                        .put(Constants.Keys.DATA, readPostLog);
                 // send request
                 Request request = new AuthorizedRequest(
                         Request.Method.POST,
                         Constants.URLs.READ_POST,
                         params,
-                        new DefaultListener() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                super.onResponse(response);
-                                mReadPostLog = new JSONArray();
-                            }
-                        },
-                        new DefaultErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                super.onErrorResponse(error);
-                                mReadPostLog = new JSONArray();
-                            }
-                        });
+                        new DefaultListener(),
+                        new DefaultErrorListener());
                 App.addRequest(request);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -334,6 +329,7 @@ public class ContentViewActivity extends BaseActivity
 
         }
     }
+
 
     @Override
     protected void onDestroy() {
