@@ -274,11 +274,15 @@ public class ContentViewActivity extends BaseActivity
 
 
     public void onEvent(PostReadEvent event) {
-        mReadPostLog.put(event.data);
-        if (mReadPostLog.length() >= LOG_QUEUE_SIZE) {
-            sendReadPostLog();
+        try {
+            mReadPostLog.put(event.data.toJsonObject());
+            Log.e("asdf", event.data.toJsonString());
+            if (mReadPostLog.length() >= LOG_QUEUE_SIZE) {
+                sendReadPostLog();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        
     }
 
     public void onEvent(PanelStateChangedEvent event) {

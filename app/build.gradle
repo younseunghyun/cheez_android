@@ -23,8 +23,8 @@ android {
         applicationId "co.cheez.cheez"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 10
-        versionName "1.1.3"
+        versionCode 12
+        versionName "1.1.5"
     }
     buildTypes {
         release {

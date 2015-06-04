@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -227,7 +226,7 @@ public class CommentDialog implements View.OnClickListener {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             super.onErrorResponse(error);
-                            Log.e("error", new String(error.networkResponse.data));
+
                             progressDialog.dismiss();
 
                         }

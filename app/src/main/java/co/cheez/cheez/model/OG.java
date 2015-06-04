@@ -9,7 +9,7 @@ import org.json.JSONObject;
 /**
  * Created by jiho on 5/18/15.
  */
-public class OG {
+public class OG extends Model {
     private long id;
     private String url;
     private String title;

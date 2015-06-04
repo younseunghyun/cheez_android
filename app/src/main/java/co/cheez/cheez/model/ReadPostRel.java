@@ -9,10 +9,16 @@ import org.json.JSONObject;
 /**
  * Created by jiho on 5/22/15.
  */
-public class ReadPostRel {
+public class ReadPostRel extends Model{
+    private long post; // post id
     private float rating;
     private boolean linkClicked;
     private boolean saved;
+    private long viewStartedTime;
+    private long viewEndedTime;
+    private long linkOpenedTime;
+    private long linkClosedTime;
+
 
     public static ReadPostRel fromJsonObject(JSONObject object) {
         return fromJsonString(object.toString());
@@ -47,5 +53,45 @@ public class ReadPostRel {
 
     public void setSaved(boolean saved) {
         this.saved = saved;
+    }
+
+    public long getViewStartedTime() {
+        return viewStartedTime;
+    }
+
+    public void setViewStartedTime(long viewStartedTime) {
+        this.viewStartedTime = viewStartedTime;
+    }
+
+    public long getViewEndedTime() {
+        return viewEndedTime;
+    }
+
+    public void setViewEndedTime(long viewEndedTime) {
+        this.viewEndedTime = viewEndedTime;
+    }
+
+    public long getLinkOpenedTime() {
+        return linkOpenedTime;
+    }
+
+    public void setLinkOpenedTime(long linkOpenedTime) {
+        this.linkOpenedTime = linkOpenedTime;
+    }
+
+    public long getLinkClosedTime() {
+        return linkClosedTime;
+    }
+
+    public void setLinkClosedTime(long linkClosedTime) {
+        this.linkClosedTime = linkClosedTime;
+    }
+
+    public long getPost() {
+        return post;
+    }
+
+    public void setPost(long post) {
+        this.post = post;
     }
 }

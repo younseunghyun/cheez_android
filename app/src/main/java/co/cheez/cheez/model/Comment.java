@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Created by jiho on 5/15/15.
  */
-public class Comment {
+public class Comment extends Model {
     private long id;
     private String comment;
     private String created;

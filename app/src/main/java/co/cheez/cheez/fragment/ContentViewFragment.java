@@ -31,8 +31,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.pkmmte.view.CircularImageView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import org.json.JSONObject;
-
 import java.util.concurrent.Callable;
 
 import co.cheez.cheez.App;
@@ -45,6 +43,7 @@ import co.cheez.cheez.event.PanelStateChangedEvent;
 import co.cheez.cheez.event.PostReadEvent;
 import co.cheez.cheez.model.Post;
 import co.cheez.cheez.model.PostDataManager;
+import co.cheez.cheez.model.ReadPostRel;
 import co.cheez.cheez.util.Constants;
 import co.cheez.cheez.util.DimensionUtil;
 import co.cheez.cheez.util.ImageDisplayUtil;
@@ -145,6 +144,7 @@ public class ContentViewFragment extends BaseFragment
     private View mContentView;
     private int mContentMenuMaxTop;
     private CommentDialog mCommentDialog;
+    private ReadPostRel mReadPostRel;
 
 
     public static BaseFragment newInstance(int position) {
@@ -179,7 +179,12 @@ public class ContentViewFragment extends BaseFragment
             return mContentView;
         }
 
-        ImageDisplayUtil.displayImage(mPost.getImageUrl(), mContentImageView);
+        String imageUrl = mPost.getImageUrl();
+        if (imageUrl == null || imageUrl.equals("")) {
+            imageUrl = Constants.URLs.NO_IMAGE;
+        }
+
+        ImageDisplayUtil.displayImage(imageUrl, mContentImageView);
         mTitleLabel.setText(mPost.getTitle());
         mSubtitleLabel.setText(mPost.getSubtitle());
         mUsernameLabel.setText(mPost.getUser().getDisplayName());
@@ -380,6 +385,8 @@ public class ContentViewFragment extends BaseFragment
         setDragViewState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         EventBus.getDefault().post(new PanelStateChangedEvent(SlidingUpPanelLayout.PanelState.COLLAPSED));
         mContentMenuWrapper.setTop(0);
+
+        mReadPostRel.setLinkClosedTime(System.currentTimeMillis() / 1000);
     }
 
     @Override
@@ -389,9 +396,11 @@ public class ContentViewFragment extends BaseFragment
         setDragViewState(SlidingUpPanelLayout.PanelState.EXPANDED);
         EventBus.getDefault().post(new PanelStateChangedEvent(SlidingUpPanelLayout.PanelState.EXPANDED));
         mLinkClicked = true;
-        if (!mSourcePageLoaded) {
+        if (!mSourcePageLoaded) {f
             loadWebViewContents();
         }
+
+        mReadPostRel.setLinkOpenedTime(System.currentTimeMillis() / 1000);
 
         App.tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("content")
@@ -470,16 +479,17 @@ public class ContentViewFragment extends BaseFragment
 
     @Override
     public void onPause() {
-        try {
-            JSONObject params = new JSONObject()
-                    .put(Constants.Keys.POST_ID, mPost.getId())
-                    .put(Constants.Keys.RATING, ratingBar.getRating())
-                    .put(Constants.Keys.SAVED, mPost.isSaved())
-                    .put(Constants.Keys.LINK_CLICKED, mLinkClicked);
-            EventBus.getDefault().post(new PostReadEvent(params));
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        if (isSlideUpPanelShown()) {
+            mReadPostRel.setLinkClosedTime(System.currentTimeMillis() / 1000);
         }
+        mReadPostRel.setViewEndedTime(System.currentTimeMillis() / 1000);
+
+        mReadPostRel.setRating(ratingBar.getRating());
+        mReadPostRel.setSaved(mPost.isSaved());
+        mReadPostRel.setLinkClicked(mLinkClicked);
+        EventBus.getDefault().post(new PostReadEvent(mReadPostRel));
+
         mContentWebView.onPause();
         mContentWebView.pauseTimers();
         super.onPause();
@@ -495,6 +505,12 @@ public class ContentViewFragment extends BaseFragment
 
             loadWebViewContents();
         }
+
+        mReadPostRel = new ReadPostRel();
+        mReadPostRel.setPost(mPost.getId());
+        mReadPostRel.setViewStartedTime(System.currentTimeMillis() / 1000);
+
+
     }
 
     public boolean isSlideUpPanelShown() {

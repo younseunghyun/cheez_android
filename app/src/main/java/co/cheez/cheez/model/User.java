@@ -4,7 +4,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import co.cheez.cheez.R;
@@ -12,7 +11,7 @@ import co.cheez.cheez.R;
 /**
  * Created by jiho on 5/15/15.
  */
-public class User {
+public class User extends Model {
     private long id;
     private long uploadCount;
     private boolean following;
@@ -28,17 +27,6 @@ public class User {
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
         return gson.fromJson(jsonString, User.class);
-    }
-
-    public JSONObject toJsonObject() throws JSONException {
-        return new JSONObject(toJsonString());
-    }
-
-    public String toJsonString() {
-        Gson gson = new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .create();
-        return gson.toJson(this);
     }
 
     public long getId() {

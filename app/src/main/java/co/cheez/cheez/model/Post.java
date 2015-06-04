@@ -9,7 +9,7 @@ import org.json.JSONObject;
 /**
  * Created by jiho on 5/15/15.
  */
-public class Post {
+public class Post extends Model {
     private long id;
     private float rating;
     private float averageRating;
