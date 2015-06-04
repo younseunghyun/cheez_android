@@ -396,7 +396,7 @@ public class ContentViewFragment extends BaseFragment
         setDragViewState(SlidingUpPanelLayout.PanelState.EXPANDED);
         EventBus.getDefault().post(new PanelStateChangedEvent(SlidingUpPanelLayout.PanelState.EXPANDED));
         mLinkClicked = true;
-        if (!mSourcePageLoaded) {f
+        if (!mSourcePageLoaded) {
             loadWebViewContents();
         }
 

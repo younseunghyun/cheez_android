@@ -38,6 +38,7 @@ import co.cheez.cheez.http.listener.DefaultListener;
 import co.cheez.cheez.model.Post;
 import co.cheez.cheez.model.PostDataManager;
 import co.cheez.cheez.model.User;
+import co.cheez.cheez.service.RegistrationIntentService;
 import co.cheez.cheez.util.Constants;
 import co.cheez.cheez.util.ImageDisplayUtil;
 import co.cheez.cheez.util.MessageUtil;
@@ -119,6 +120,10 @@ public class ContentViewActivity extends BaseActivity
             startActivity(intent);
             return;
         }
+
+        // send gcm token to server
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
 
         View contentView = ViewMapper.inflateLayout(this, this, R.layout.activity_content_view);
         setContentView(contentView);

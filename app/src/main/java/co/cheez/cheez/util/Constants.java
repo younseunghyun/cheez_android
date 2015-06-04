@@ -42,6 +42,7 @@ public interface Constants {
         String SAVED = "saved";
         String COMMENT = "comment";
         String DATA = "data";
+        String PUSH_TOKEN = "push_token";
     }
 
     interface URLs {
@@ -56,5 +57,6 @@ public interface Constants {
         String COMMENT = BASE + "comment/";
         String SHARE = "http://bite.cheez.co/";
         String NO_IMAGE = "https://d5pd307bf8hwt.cloudfront.net/no_image.png";
+        String PUSH_TOKEN = BASE + "push-token/";
     }
 }
