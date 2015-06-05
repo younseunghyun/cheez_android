@@ -14,9 +14,12 @@ import co.cheez.cheez.R;
 public class User extends Model {
     private long id;
     private long uploadCount;
+    private long followerCount;
+    private long followeeCount;
     private boolean following;
     private String name;
     private String profileImage;
+    private long[] followers;
 
     public static User fromJsonObject(JSONObject object) {
         return fromJsonString(object.toString());
@@ -26,7 +29,13 @@ public class User extends Model {
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
-        return gson.fromJson(jsonString, User.class);
+
+
+        User user = gson.fromJson(jsonString, User.class);
+
+        // followers에는 본인의 id만 들어가도록 서버에서 처리되어있기 때문에..
+        user.setFollowing(user.getFollowers().length > 0);
+        return user;
     }
 
     public long getId() {
@@ -83,4 +92,30 @@ public class User extends Model {
     public void setUploadCount(long uploadCount) {
         this.uploadCount = uploadCount;
     }
+
+    public long getFollowerCount() {
+        return followerCount;
+    }
+
+    public void setFollowerCount(long followerCount) {
+        this.followerCount = followerCount;
+    }
+
+    public long getFolloweeCount() {
+        return followeeCount;
+    }
+
+    public void setFolloweeCount(long followeeCount) {
+        this.followeeCount = followeeCount;
+    }
+
+    public long[] getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(long[] followers) {
+        this.followers = followers;
+    }
+
+
 }

@@ -17,15 +17,13 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <TextView
-                android:id="@+id/tv_toolbar_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:textColor="@android:color/white"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/text_toolbar"
-                />
+                android:text="@string/label_profile_title"/>
             <ImageButton
                 android:id="@+id/btn_finish"
                 style="?android:attr/borderlessButtonStyle"
@@ -52,12 +50,90 @@
             app:border_width="0dp"
             app:shadow="true"
             />
-        <TextView
-            android:id="@+id/tv_cheez_count"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            />
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_toolbar_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_title"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:layout_toLeftOf="@+id/rl_edit_profile_btn_wrap"
+                    />
+                <RelativeLayout
+                    android:id="@+id/rl_edit_profile_btn_wrap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true">
+
+                    <Button
+                        android:id="@+id/btn_edit_profile"
+                        android:layout_width="@dimen/profile_follow_button_width"
+                        android:layout_height="@dimen/profile_follow_btn_height"
+                        android:textColor="@android:color/white"
+                        android:text="@string/btn_edit_profile"
+                        android:background="@drawable/btn_gray"
+                        android:visibility="gone"
+                        />
+
+                    <co.cheez.cheez.view.IconToggleButton
+                        android:id="@+id/tb_follow"
+                        android:layout_width="@dimen/profile_follow_button_width"
+                        android:layout_height="@dimen/profile_follow_btn_height"
+                        android:background="@drawable/togglebutton_yellow"
+                        android:textColor="@color/text_togglebtn_yellow"
+                        android:textOn="@string/tb_follow_on"
+                        android:textOff="@string/tb_follow_off"
+                        android:textAllCaps="false"
+                        android:visibility="gone"
+                        />
+                </RelativeLayout>
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_state_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lightgray"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_cheez_count"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/theme_secondary"
+                    android:text="CHEEZ"
+                    />
+                <TextView
+                    android:id="@+id/tv_followee_count"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/theme_secondary"
+                    android:text="팔로잉"
+                    />
+                <TextView
+                    android:id="@+id/tv_follower_count"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/theme_secondary"
+                    android:text="팔로워"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"

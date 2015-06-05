@@ -192,9 +192,13 @@ public class LoginFragment extends BaseFragment
                                     .put(Constants.Keys.SNS_PROFILE_URL, "https://www.facebook.com/" + object.get("id"));
                             JSONArray snsAccounts = new JSONArray().put(snsAccountData);
                             JSONArray devices = new JSONArray().put(DeviceUtil.getDeviceInfo());
+                            String email = null;
+                            if (object.has("email")) {
+                                email = object.getString("email");
+                            }
                             JSONObject userData = new JSONObject()
                                     .put(Constants.Keys.NAME, object.get("name"))
-                                    .put(Constants.Keys.EMAIL, object.get("email"))
+                                    .put(Constants.Keys.EMAIL, email)
                                     .put(Constants.Keys.DEVICES, devices)
                                     .put(Constants.Keys.SNS_ACCOUNTS, snsAccounts);
 

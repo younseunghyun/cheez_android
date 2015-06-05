@@ -51,5 +51,12 @@
     <string name="message_prepare">준비중이에용 ლ(ʘ▽ʘ)ლ</string>
     <string name="message_upload_complete">업로드되었습니다</string>
     <string name="gcm_sender_id">727140817621</string>
+    <string name="btn_edit_profile">프로필 수정</string>
+    <string name="tb_follow_on">{fa-check} 팔로잉</string>
+    <string name="tb_follow_off">{fa-plus} 팔로우</string>
+    <string name="label_profile_title">프로필 보기</string>
+    <string name="cheez_count">CHEEZ %d</string>
+    <string name="follower_count">팔로워 %d</string>
+    <string name="followee_count">팔로잉 %d</string>
 
 </resources>

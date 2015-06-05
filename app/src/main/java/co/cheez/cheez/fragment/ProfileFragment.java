@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -25,6 +27,7 @@ import co.cheez.cheez.App;
 import co.cheez.cheez.R;
 import co.cheez.cheez.activity.BaseActivity;
 import co.cheez.cheez.adapter.ContentRecyclerViewAdapter;
+import co.cheez.cheez.auth.Auth;
 import co.cheez.cheez.automation.view.DeclareView;
 import co.cheez.cheez.http.AuthorizedRequest;
 import co.cheez.cheez.http.listener.DefaultErrorListener;
@@ -40,7 +43,7 @@ import co.cheez.cheez.util.ViewAnimateUtil;
  * A placeholder fragment containing a simple view.
  */
 public class ProfileFragment extends BaseFragment
-        implements View.OnClickListener {
+        implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     @DeclareView(id = R.id.tv_toolbar_username)
     private TextView mUsernameLabel;
@@ -62,6 +65,20 @@ public class ProfileFragment extends BaseFragment
 
     @DeclareView(id = R.id.btn_finish, click = "this")
     private View mFinishButton;
+
+    @DeclareView(id = R.id.btn_edit_profile, click = "this")
+    private View mEditProfileButton;
+
+    @DeclareView(id = R.id.tb_follow)
+    private ToggleButton mFollowToggleButton;
+
+    @DeclareView(id = R.id.tv_follower_count)
+    private TextView mFollowerCountLabel;
+
+    @DeclareView(id = R.id.tv_followee_count)
+    private TextView mFolloweeCountLabel;
+
+
 
     private ContentRecyclerViewAdapter mPostListAdapter;
     private User mUser;
@@ -87,6 +104,16 @@ public class ProfileFragment extends BaseFragment
 
         View contentView = super.onCreateView(inflater, container, savedInstanceState);
 
+        User loggedUser = Auth.getInstance().getUser();
+
+        if (userId == 0
+                || (loggedUser != null && userId == loggedUser.getId())) {
+            // 내 프로필
+            mEditProfileButton.setVisibility(View.VISIBLE);
+        } else {
+            mFollowToggleButton.setVisibility(View.VISIBLE);
+        }
+
         mPostListAdapter = new ContentRecyclerViewAdapter();
         mLayoutManager = new LinearLayoutManager(getActivity());
         mPostListRecyclerView.setAdapter(mPostListAdapter);
@@ -95,7 +122,7 @@ public class ProfileFragment extends BaseFragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (mLayoutManager.findLastVisibleItemPosition()
-                        == mPostListAdapter.getItemCount()-1) {
+                        == mPostListAdapter.getItemCount() - 1) {
                     loadPostList();
                 }
             }
@@ -111,7 +138,19 @@ public class ProfileFragment extends BaseFragment
 
         ImageDisplayUtil.displayImage(user.getDisplayImageUrl(), mProfileImageView);
         mUsernameLabel.setText(user.getDisplayName());
-        mCheezCountLabel.setText("CHEEZ " + mUser.getUploadCount());
+        Log.e(getString(R.string.cheez_count), String.format(getString(R.string.cheez_count), mUser.getUploadCount()));
+        mCheezCountLabel.setText(
+                String.format(getString(R.string.cheez_count), mUser.getUploadCount()));
+        mFolloweeCountLabel.setText(
+                String.format(getString(R.string.followee_count),  mUser.getFolloweeCount()));
+        mFollowerCountLabel.setText(
+                String.format(getString(R.string.follower_count),  mUser.getFollowerCount()));
+
+        if (user.isFollowing()) {
+            mFollowToggleButton.setChecked(true);
+        }
+
+        mFollowToggleButton.setOnCheckedChangeListener(this);
     }
 
     private void loadUserData(long userId) {
@@ -123,8 +162,8 @@ public class ProfileFragment extends BaseFragment
                     @Override
                     public void onResponse(JSONObject response) {
                         super.onResponse(response);
-                        setUser(User.fromJsonObject(response));
                         ((BaseActivity) getActivity()).hideProgressDialog();
+                        setUser(User.fromJsonObject(response));
                         loadPostList();
                         Log.e("userdata", response.toString());
                     }
@@ -224,6 +263,60 @@ public class ProfileFragment extends BaseFragment
             case R.id.btn_finish:
                 getActivity().finish();
                 break;
+            case R.id.btn_edit_profile:
+
+                break;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+        try {
+            JSONObject params = new JSONObject().put(Constants.Keys.USER_ID, mUser.getId());
+            if (isChecked) {
+                mUser.setFollowerCount(mUser.getFolloweeCount() + 1);
+            } else {
+                mUser.setFollowerCount(mUser.getFolloweeCount() - 1);
+                params.put(Constants.Keys.DELETE, true);
+            }
+            mFolloweeCountLabel.setText(
+                    String.format(getString(R.string.follower_count),  mUser.getFollowerCount()));
+            Request request = new AuthorizedRequest(
+                    Request.Method.POST,
+                    Constants.URLs.FOLLOW,
+                    params,
+                    new DefaultListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            super.onResponse(response);
+                            ((BaseActivity) getActivity()).hideProgressDialog();
+
+                        }
+                    },
+                    new DefaultErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            super.onErrorResponse(error);
+                            if (isChecked) {
+                                mUser.setFollowerCount(mUser.getFolloweeCount() - 1);
+                            } else {
+                                mUser.setFollowerCount(mUser.getFolloweeCount() + 1);
+                            }
+                            mFollowerCountLabel.setText(
+                                    String.format(getString(R.string.follower_count),  mUser.getFollowerCount()));
+
+                            mFollowToggleButton.setOnCheckedChangeListener(null);
+                            mFollowToggleButton.setChecked(!isChecked);
+                            mFollowToggleButton.setOnCheckedChangeListener(ProfileFragment.this);
+
+                            ((BaseActivity) getActivity()).hideProgressDialog();
+                        }
+                    }
+            );
+            ((BaseActivity) getActivity()).showProgressDialog();
+            App.addRequest(request);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

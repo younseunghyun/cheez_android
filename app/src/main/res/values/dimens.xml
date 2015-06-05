@@ -47,5 +47,7 @@
     <dimen name="upload_image_view_size">64dp</dimen>
     <dimen name="contentview_title_size">20sp</dimen>
     <dimen name="contentview_subtitle_size">18sp</dimen>
+    <dimen name="profile_follow_button_width">96dp</dimen>
+    <dimen name="profile_follow_btn_height">24dp</dimen>
 
 </resources>
