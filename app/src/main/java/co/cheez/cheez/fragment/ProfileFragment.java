@@ -279,7 +279,7 @@ public class ProfileFragment extends BaseFragment
                 mUser.setFollowerCount(mUser.getFolloweeCount() - 1);
                 params.put(Constants.Keys.DELETE, true);
             }
-            mFolloweeCountLabel.setText(
+            mFollowerCountLabel.setText(
                     String.format(getString(R.string.follower_count),  mUser.getFollowerCount()));
             Request request = new AuthorizedRequest(
                     Request.Method.POST,
@@ -289,7 +289,7 @@ public class ProfileFragment extends BaseFragment
                         @Override
                         public void onResponse(JSONObject response) {
                             super.onResponse(response);
-                            ((BaseActivity) getActivity()).hideProgressDialog();
+                            ((BaseActivity) getActigvity()).hideProgressDialog();
 
                         }
                     },
