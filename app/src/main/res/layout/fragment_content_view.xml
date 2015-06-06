@@ -178,47 +178,60 @@
             android:id="@+id/tb_like"
             android:layout_width="@dimen/btn_size_normal"
             android:layout_height="@dimen/btn_size_normal"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/togglebutton_like"
+            android:textOff=" "
+            android:textOn=" "
+            />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/fab_margin"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:padding="@dimen/fab_margin"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true">
-            <com.melnykov.fab.FloatingActionButton
+            <com.software.shell.fab.ActionButton
                 android:id="@+id/btn_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_margin"
-                android:src="@drawable/btn_comment"
-                fab:fab_type="mini"
-                fab:fab_colorNormal="@color/theme_primary"
-                fab:fab_colorPressed="@color/theme_primary_dark"
-                fab:fab_colorRipple="@color/theme_primary_dark" />
-            <com.melnykov.fab.FloatingActionButton
+                fab:image="@drawable/btn_comment"
+                fab:rippleEffect_enabled="true"
+                fab:type="MINI"
+                fab:button_color="@color/theme_primary"
+                fab:button_colorPressed="@color/theme_primary_dark"
+                fab:button_colorRipple="@color/theme_primary_dark"
+                fab:shadow_radius="2.0dp"
+                fab:shadow_yOffset="1.0dp"/>
+            <com.software.shell.fab.ActionButton
                 android:id="@+id/btn_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_margin"
-                android:src="@drawable/btn_share"
-                fab:fab_type="mini"
-                fab:fab_colorNormal="@color/theme_primary"
-                fab:fab_colorPressed="@color/theme_primary_dark"
-                fab:fab_colorRipple="@color/theme_primary_dark" />
-            <com.melnykov.fab.FloatingActionButton
+                fab:image="@drawable/btn_share"
+                fab:rippleEffect_enabled="true"
+                fab:type="MINI"
+                fab:button_color="@color/theme_primary"
+                fab:button_colorPressed="@color/theme_primary_dark"
+                fab:button_colorRipple="@color/theme_primary_dark"
+                fab:shadow_radius="2.0dp"
+                fab:shadow_yOffset="1.0dp"/>
+            <com.software.shell.fab.ActionButton
                 android:id="@+id/btn_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_margin"
-                android:src="@drawable/btn_more"
-                fab:fab_type="mini"
-                fab:fab_colorNormal="@color/theme_primary"
-                fab:fab_colorPressed="@color/theme_primary_dark"
-                fab:fab_colorRipple="@color/theme_primary_dark" />
+                fab:image="@drawable/btn_more"
+                fab:rippleEffect_enabled="true"
+                fab:type="MINI"
+                fab:button_color="@color/theme_primary"
+                fab:button_colorPressed="@color/theme_primary_dark"
+                fab:button_colorRipple="@color/theme_primary_dark"
+                fab:shadow_radius="2.0dp"
+                fab:shadow_yOffset="1.0dp"/>
 
         </LinearLayout>
     </RelativeLayout>
