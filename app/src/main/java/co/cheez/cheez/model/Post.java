@@ -11,9 +11,9 @@ import org.json.JSONObject;
  */
 public class Post extends Model {
     private long id;
-    private float rating;
     private float averageRating;
     private boolean saved;
+    private boolean liked;
     private String body;
     private String imageUrl;
     private String sourceUrl;
@@ -35,10 +35,10 @@ public class Post extends Model {
         Post post = gson.fromJson(jsonString, Post.class);
         ReadPostRel[] readPostRels = post.getReadPostRels();
         if (readPostRels.length > 0) {
-            post.setRating(readPostRels[0].getRating());
+            post.setLiked(readPostRels[0].isLiked());
             post.setSaved(readPostRels[0].isSaved());
         } else {
-            post.setRating(0f);
+            post.setLiked(false);
             post.setSaved(false);
         }
 
@@ -60,25 +60,12 @@ public class Post extends Model {
         this.id = id;
     }
 
-    public float getRating() {
-        return rating;
-    }
-
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
-
-
     public float getAverageRating() {
         return averageRating;
     }
 
     public void setAverageRating(float averageRating) {
         this.averageRating = averageRating;
-    }
-
-    public boolean isRated() {
-        return rating > 0;
     }
 
     public String getBody() {
@@ -143,5 +130,13 @@ public class Post extends Model {
 
     public void setSaved(boolean saved) {
         this.saved = saved;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 }

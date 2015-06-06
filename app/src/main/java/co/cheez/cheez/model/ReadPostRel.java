@@ -11,7 +11,7 @@ import org.json.JSONObject;
  */
 public class ReadPostRel extends Model{
     private long post; // post id
-    private float rating;
+    private boolean liked;
     private boolean linkClicked;
     private boolean saved;
     private long viewStartedTime;
@@ -39,13 +39,6 @@ public class ReadPostRel extends Model{
         this.linkClicked = linkClicked;
     }
 
-    public float getRating() {
-        return rating;
-    }
-
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
 
     public boolean isSaved() {
         return saved;
@@ -93,5 +86,13 @@ public class ReadPostRel extends Model{
 
     public void setPost(long post) {
         this.post = post;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 }

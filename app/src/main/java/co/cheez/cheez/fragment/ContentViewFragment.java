@@ -23,9 +23,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.pkmmte.view.CircularImageView;
@@ -100,8 +100,8 @@ public class ContentViewFragment extends BaseFragment
     @DeclareView(id = R.id.btn_menu, click = "this")
     private View menuButton;
 
-    @DeclareView(id = R.id.ratingbar)
-    private RatingBar ratingBar;
+    @DeclareView(id = R.id.tb_like)
+    private ToggleButton likeToggleButton;
 
     @DeclareView(id = R.id.rl_content_menu)
     private View mContentMenuWrapper;
@@ -196,7 +196,7 @@ public class ContentViewFragment extends BaseFragment
         String userProfileImageUrl = mPost.getUser().getDisplayImageUrl();
         ImageDisplayUtil.displayImage(userProfileImageUrl, mUserProfileImageView);
 
-        ratingBar.setRating(mPost.getRating());
+        likeToggleButton.setChecked(mPost.isLiked());
 
         mContentMenuMaxTop = (int) DimensionUtil.dpToPx(60);
         mContentWebView.setOnScrollListener(new ScrollObservableWebView.OnScrollListener() {
@@ -485,7 +485,7 @@ public class ContentViewFragment extends BaseFragment
         }
         mReadPostRel.setViewEndedTime(System.currentTimeMillis() / 1000);
 
-        mReadPostRel.setRating(ratingBar.getRating());
+        mReadPostRel.setLiked(likeToggleButton.isChecked());
         mReadPostRel.setSaved(mPost.isSaved());
         mReadPostRel.setLinkClicked(mLinkClicked);
         EventBus.getDefault().post(new PostReadEvent(mReadPostRel));

@@ -173,15 +173,12 @@
         android:clipToPadding="false"
         android:padding="@dimen/padding_content_menu"
         >
-        <RatingBar
-            android:id="@+id/ratingbar"
-            android:numStars="5"
-            android:stepSize="0.5"
-            style="@style/cheezRatingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/ratingbar_height"
-            android:layout_alignParentBottom="true"
-            />
+
+        <ToggleButton
+            android:id="@+id/tb_like"
+            android:layout_width="@dimen/btn_size_normal"
+            android:layout_height="@dimen/btn_size_normal"
+            android:layout_alignParentBottom="true"/>
 
         <LinearLayout
             android:orientation="horizontal"
