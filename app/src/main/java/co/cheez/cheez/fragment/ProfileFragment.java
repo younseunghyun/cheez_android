@@ -138,7 +138,6 @@ public class ProfileFragment extends BaseFragment
 
         ImageDisplayUtil.displayImage(user.getDisplayImageUrl(), mProfileImageView);
         mUsernameLabel.setText(user.getDisplayName());
-        Log.e(getString(R.string.cheez_count), String.format(getString(R.string.cheez_count), mUser.getUploadCount()));
         mCheezCountLabel.setText(
                 String.format(getString(R.string.cheez_count), mUser.getUploadCount()));
         mFolloweeCountLabel.setText(
@@ -274,9 +273,9 @@ public class ProfileFragment extends BaseFragment
         try {
             JSONObject params = new JSONObject().put(Constants.Keys.USER_ID, mUser.getId());
             if (isChecked) {
-                mUser.setFollowerCount(mUser.getFolloweeCount() + 1);
+                mUser.setFollowerCount(mUser.getFollowerCount() + 1);
             } else {
-                mUser.setFollowerCount(mUser.getFolloweeCount() - 1);
+                mUser.setFollowerCount(mUser.getFollowerCount() - 1);
                 params.put(Constants.Keys.DELETE, true);
             }
             mFollowerCountLabel.setText(
@@ -289,7 +288,7 @@ public class ProfileFragment extends BaseFragment
                         @Override
                         public void onResponse(JSONObject response) {
                             super.onResponse(response);
-                            ((BaseActivity) getActigvity()).hideProgressDialog();
+                            ((BaseActivity) getActivity()).hideProgressDialog();
 
                         }
                     },
@@ -298,9 +297,9 @@ public class ProfileFragment extends BaseFragment
                         public void onErrorResponse(VolleyError error) {
                             super.onErrorResponse(error);
                             if (isChecked) {
-                                mUser.setFollowerCount(mUser.getFolloweeCount() - 1);
+                                mUser.setFollowerCount(mUser.getFollowerCount() - 1);
                             } else {
-                                mUser.setFollowerCount(mUser.getFolloweeCount() + 1);
+                                mUser.setFollowerCount(mUser.getFollowerCount() + 1);
                             }
                             mFollowerCountLabel.setText(
                                     String.format(getString(R.string.follower_count),  mUser.getFollowerCount()));
