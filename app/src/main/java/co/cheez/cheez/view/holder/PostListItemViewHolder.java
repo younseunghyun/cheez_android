@@ -33,6 +33,15 @@ public class PostListItemViewHolder extends RecyclerView.ViewHolder
     @DeclareView(id = R.id.tv_post_subtitle)
     private TextView mPostSubtitleLabel;
 
+    @DeclareView(id = R.id.tv_like_count)
+    private TextView mLikeCountLabel;
+
+    @DeclareView(id = R.id.tv_comment_count)
+    private TextView mCommentCountLabel;
+
+    @DeclareView(id = R.id.tv_view_count)
+    private TextView mViewCountLabel;
+
     public PostListItemViewHolder(View view) {
         super(view);
         ViewMapper.mapLayout(this, view);
@@ -45,6 +54,10 @@ public class PostListItemViewHolder extends RecyclerView.ViewHolder
         ImageDisplayUtil.displayImage(mPost.getImageUrl(), mPostImageView);
         mPostTitleLabel.setText(mPost.getTitle());
         mPostSubtitleLabel.setText(mPost.getSubtitle());
+
+        mLikeCountLabel.setText(mPost.getDisplayLikeCount());
+        mCommentCountLabel.setText(" " + mPost.getDisplayCommentCount());
+        mViewCountLabel.setText(" " + mPost.getDisplayViewCount());
     }
 
     @Override

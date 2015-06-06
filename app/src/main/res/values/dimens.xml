@@ -49,5 +49,6 @@
     <dimen name="contentview_subtitle_size">18sp</dimen>
     <dimen name="profile_follow_button_width">96dp</dimen>
     <dimen name="profile_follow_btn_height">24dp</dimen>
+    <dimen name="postlist_count_margin">8dp</dimen>
 
 </resources>

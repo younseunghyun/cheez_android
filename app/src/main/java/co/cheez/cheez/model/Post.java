@@ -19,6 +19,9 @@ public class Post extends Model {
     private String sourceUrl;
     private String subtitle;
     private String title;
+    private long likeCount;
+    private long commentCount;
+    private long viewCount;
 
     private User user;
     private ReadPostRel[] readPostRels;
@@ -138,5 +141,51 @@ public class Post extends Model {
 
     public void setLiked(boolean liked) {
         this.liked = liked;
+    }
+
+    public long getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(long likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public String getDisplayLikeCount() {
+        return getDisplayCount(getLikeCount());
+    }
+
+    public long getCommentCount() {
+        return commentCount;
+    }
+
+    public String getDisplayCommentCount() {
+        return getDisplayCount(getCommentCount());
+    }
+
+    public void setCommentCount(long commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public long getViewCount() {
+        return viewCount;
+    }
+
+    public String getDisplayViewCount() {
+        return getDisplayCount(getViewCount());
+    }
+
+    public void setViewCount(long viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    private String getDisplayCount(long count) {
+        if (count > 1000000) {
+            return " " + (count / 1000000) + "m";
+        } else if (count > 1000) {
+            return " " + (count / 1000) + "k";
+        } else {
+            return " " + count;
+        }
     }
 }
