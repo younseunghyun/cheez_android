@@ -1,86 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rl_listitem_root"
-    style="?android:borderlessButtonStyle"
-    android:padding="0dp"
-    android:layout_margin="0dp"
-    android:minWidth="0dp"
-    android:minHeight="0dp"
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+
     >
     <LinearLayout
         android:orientation="horizontal" android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/background_post_list_item"
         android:layout_marginLeft="@dimen/margin_listitem_horizontal"
         android:layout_marginRight="@dimen/margin_listitem_horizontal"
         android:layout_marginTop="@dimen/margin_listitem_vertical"
         android:layout_marginBottom="@dimen/margin_listitem_vertical"
-        android:padding="@dimen/padding_listitem"
+
         >
-
-        <ImageView
-            android:id="@+id/iv_post_image"
-            android:padding="@dimen/padding_listitem"
-            android:layout_width="@dimen/postlist_image_size"
-            android:layout_height="@dimen/postlist_image_size"
-            android:scaleType="centerCrop"
-            android:layout_marginRight="@dimen/padding_listitem"/>
-
         <LinearLayout
+            android:id="@+id/ll_listitem_root"
+            android:orientation="horizontal"
+            android:background="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_post_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/text_title"
-                />
-            <TextView
-                android:id="@+id/tv_post_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_subtitle"
-                />
-            <LinearLayout
-                android:layout_gravity="right"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_like_count"
-                    android:drawableLeft="@drawable/icon_like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_margin="@dimen/postlist_count_margin"
-                    android:textColor="@color/lightgray"
-                    />
-                <TextView
-                    android:id="@+id/tv_comment_count"
-                    android:drawableLeft="@drawable/icon_comment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_margin="@dimen/postlist_count_margin"
-                    android:textColor="@color/lightgray"
-                    />
-                <TextView
-                    android:id="@+id/tv_view_count"
-                    android:drawableLeft="@drawable/icon_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_margin="@dimen/postlist_count_margin"
-                    android:textColor="@color/lightgray"
-                    />
-            </LinearLayout>
+            android:padding="@dimen/padding_listitem">
 
+
+
+            <RelativeLayout
+                android:layout_width="@dimen/postlist_image_size"
+                android:layout_height="@dimen/postlist_image_size"
+                android:layout_marginRight="@dimen/padding_listitem"
+                >
+                <ImageView
+                    android:id="@+id/iv_post_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    />
+
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_post_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_title"
+                    />
+                <TextView
+                    android:id="@+id/tv_post_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_subtitle"
+                    />
+                <LinearLayout
+                    android:layout_gravity="right"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_like_count"
+                        android:drawableLeft="@drawable/icon_like"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_margin="@dimen/postlist_count_margin"
+                        android:textColor="@color/lightgray"
+                        />
+                    <TextView
+                        android:id="@+id/tv_comment_count"
+                        android:drawableLeft="@drawable/icon_comment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_margin="@dimen/postlist_count_margin"
+                        android:textColor="@color/lightgray"
+                        />
+                    <TextView
+                        android:id="@+id/tv_view_count"
+                        android:drawableLeft="@drawable/icon_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_margin="@dimen/postlist_count_margin"
+                        android:textColor="@color/lightgray"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+    <ImageButton
+        android:id="@+id/btn_delete_post"
+        android:layout_width="@dimen/btn_size_small"
+        android:layout_height="@dimen/btn_size_small"
+        android:src="@drawable/ic_close_grey600_18dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/margin_listitem_vertical"
+        android:layout_marginRight="@dimen/margin_listitem_horizontal"
+        />
 </RelativeLayout>

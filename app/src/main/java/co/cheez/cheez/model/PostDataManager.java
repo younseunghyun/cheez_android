@@ -3,6 +3,7 @@ package co.cheez.cheez.model;
 import java.util.ArrayList;
 
 import co.cheez.cheez.event.PostAddedEvent;
+import co.cheez.cheez.event.PostRemoveEvent;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -34,6 +35,13 @@ public class PostDataManager {
 
     public void prepend(Post post) {
         insert(0, post);
+    }
+
+    public void remove(Post post) {
+        mPostList.remove(post);
+        EventBus.getDefault().post(
+                new PostRemoveEvent(post)
+        );
     }
 
     public void insert(int index, Post post) {

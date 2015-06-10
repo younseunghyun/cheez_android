@@ -1,5 +1,6 @@
 package co.cheez.cheez;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
@@ -49,6 +50,8 @@ public class App extends Application {
     public static GoogleAnalytics analytics;
     public static Tracker tracker;
 
+    private static Activity mCurrentActivity;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -63,7 +66,7 @@ public class App extends Application {
 
 
         // https://developers.google.com/analytics/devguides/collection/android/v4/
-        initializeTracker();
+        // initializeTracker();
     }
 
     private void initializeTracker() {
@@ -154,4 +157,13 @@ public class App extends Application {
     public static DisplayImageOptions getDefaultImageDisplayOption() {
         return mDisplayImageOptions;
     }
+
+    public static void setCurrentActivity(Activity activity) {
+        mCurrentActivity = activity;
+    }
+
+    public static Activity getCurrentActivity() {
+        return mCurrentActivity;
+    }
+
 }

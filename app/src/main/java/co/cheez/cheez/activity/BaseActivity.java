@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import co.cheez.cheez.App;
 import co.cheez.cheez.automation.lifecycle.LifecycleObservable;
 import co.cheez.cheez.automation.lifecycle.LifecycleObserver;
 import co.cheez.cheez.util.DialogUtil;
@@ -82,10 +83,12 @@ public abstract class BaseActivity extends ActionBarActivity
         while(iterator.hasNext()) {
             iterator.next().onResume();
         }
+        App.setCurrentActivity(this);
     }
 
     @Override
     protected void onPause() {
+        App.setCurrentActivity(null);
         Iterator<LifecycleObserver> iterator = mLifecycleObservers.iterator();
         while(iterator.hasNext()) {
             iterator.next().onPause();

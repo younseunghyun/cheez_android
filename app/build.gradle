@@ -51,7 +51,7 @@ dependencies {
     compile 'com.github.shell-software:fab:1.1.1'
     compile 'com.github.bumptech.glide:glide:3.6.0'
     compile 'com.joanzapata.android:android-iconify:1.0.9'
-    compile('com.crashlytics.sdk.android:crashlytics:2.2.4@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
         transitive = true;
     }
     compile project(':library-2.4.1')

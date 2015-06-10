@@ -27,13 +27,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.pkmmte.view.CircularImageView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.concurrent.Callable;
 
-import co.cheez.cheez.App;
 import co.cheez.cheez.R;
 import co.cheez.cheez.activity.ProfileActivity;
 import co.cheez.cheez.automation.view.DeclareView;
@@ -402,11 +400,13 @@ public class ContentViewFragment extends BaseFragment
 
         mReadPostRel.setLinkOpenedTime(System.currentTimeMillis() / 1000);
 
+        /*
         App.tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("content")
                 .setAction("view")
                 .setLabel("content view: " + mPost.getId())
                 .build());
+                //*/
     }
 
     private void setDragViewState(SlidingUpPanelLayout.PanelState state) {

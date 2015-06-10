@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import co.cheez.cheez.event.PostAddedEvent;
+import co.cheez.cheez.event.PostRemoveEvent;
 import co.cheez.cheez.fragment.BaseFragment;
 import co.cheez.cheez.fragment.ContentViewFragment;
 import co.cheez.cheez.model.Post;
@@ -62,6 +63,9 @@ public class ContentViewPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void onEvent(PostAddedEvent event) {
+        notifyDataSetChanged();
+    }
+    public void onEvent(PostRemoveEvent event) {
         notifyDataSetChanged();
     }
 }

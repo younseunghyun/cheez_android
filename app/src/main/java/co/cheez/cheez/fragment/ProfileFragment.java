@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +76,6 @@ public class ProfileFragment extends BaseFragment
 
     @DeclareView(id = R.id.tv_followee_count)
     private TextView mFolloweeCountLabel;
-
 
 
     private ContentRecyclerViewAdapter mPostListAdapter;
@@ -164,7 +162,6 @@ public class ProfileFragment extends BaseFragment
                         ((BaseActivity) getActivity()).hideProgressDialog();
                         setUser(User.fromJsonObject(response));
                         loadPostList();
-                        Log.e("userdata", response.toString());
                     }
                 },
                 new DefaultErrorListener() {
