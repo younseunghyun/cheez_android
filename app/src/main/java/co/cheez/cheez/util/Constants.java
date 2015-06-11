@@ -44,6 +44,7 @@ public interface Constants {
         String DATA = "data";
         String PUSH_TOKEN = "push_token";
         String DELETE = "delete";
+        String STATE_MESSAGE = "state_message";
     }
 
     interface URLs {

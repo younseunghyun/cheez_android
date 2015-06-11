@@ -19,6 +19,7 @@ public class User extends Model {
     private boolean following;
     private String name;
     private String profileImage;
+    private String stateMessage;
     private long[] followers;
 
     public static User fromJsonObject(JSONObject object) {
@@ -118,4 +119,11 @@ public class User extends Model {
     }
 
 
+    public String getStateMessage() {
+        return stateMessage;
+    }
+
+    public void setStateMessage(String stateMessage) {
+        this.stateMessage = stateMessage;
+    }
 }

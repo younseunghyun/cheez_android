@@ -58,5 +58,13 @@
     <string name="cheez_count">CHEEZ %d</string>
     <string name="follower_count">팔로워 %d</string>
     <string name="followee_count">팔로잉 %d</string>
+    <string name="title_activity_profile_edit">ProfileEditActivity</string>
+    <string name="label_edit_profile">프로필 수정</string>
+    <string name="label_nickname">닉네임</string>
+    <string name="label_state_message">한줄 소개</string>
+    <string name="label_profile_image">프로필 사진</string>
+    <string name="btn_edit_submit">수정하기</string>
+    <string name="message_nickname_required">닉네임을 입력해주세요</string>
+    <string name="error_nickname_duplicated">이미 사용중인 닉네임이에요 :(</string>
 
 </resources>

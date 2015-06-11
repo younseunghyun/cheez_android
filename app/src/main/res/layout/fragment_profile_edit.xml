@@ -1,0 +1,107 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="co.cheez.cheez.fragment.ContentUploadFragment">
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/theme_primary">
+        <ImageButton
+            android:id="@+id/btn_finish"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="@dimen/btn_size_normal"
+            android:layout_height="@dimen/btn_size_normal"
+            android:src="@drawable/ic_chevron_left_white_24dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            android:text="@string/label_edit_profile"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/btn_submit"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/content_upload_fragment_padding"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_subtitle"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/label_nickname"/>
+            
+            <EditText
+                android:id="@+id/et_nickname"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/upload_input_height"
+                android:layout_marginTop="@dimen/upload_input_vertical_margin"
+                android:layout_marginBottom="@dimen/upload_input_vertical_margin"
+                android:singleLine="true"
+                android:paddingLeft="@dimen/input_padding"
+                android:paddingRight="@dimen/input_padding"
+                android:background="@drawable/input_background"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_subtitle"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/label_state_message"/>
+
+            <EditText
+                android:id="@+id/et_state_message"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/upload_input_height"
+                android:layout_marginTop="@dimen/upload_input_vertical_margin"
+                android:layout_marginBottom="@dimen/upload_input_vertical_margin"
+                android:singleLine="true"
+                android:paddingLeft="@dimen/input_padding"
+                android:paddingRight="@dimen/input_padding"
+                android:background="@drawable/input_background"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_subtitle"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/label_profile_image"/>
+            <com.pkmmte.view.CircularImageView
+                android:id="@+id/iv_profile_image"
+                android:layout_width="@dimen/upload_image_view_size"
+                android:layout_height="@dimen/upload_image_view_size"
+                android:layout_marginTop="@dimen/upload_input_vertical_margin"
+                android:layout_marginBottom="@dimen/upload_input_vertical_margin"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_submit"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/content_upload_fragment_padding"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/primary_button_background"
+        android:textColor="@android:color/white"
+        android:text="@string/btn_edit_submit"
+        />
+</RelativeLayout>

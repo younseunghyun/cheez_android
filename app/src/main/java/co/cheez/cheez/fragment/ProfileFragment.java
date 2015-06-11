@@ -1,5 +1,7 @@
 package co.cheez.cheez.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +27,7 @@ import java.util.concurrent.Callable;
 import co.cheez.cheez.App;
 import co.cheez.cheez.R;
 import co.cheez.cheez.activity.BaseActivity;
+import co.cheez.cheez.activity.ProfileEditActivity;
 import co.cheez.cheez.adapter.ContentRecyclerViewAdapter;
 import co.cheez.cheez.auth.Auth;
 import co.cheez.cheez.automation.view.DeclareView;
@@ -43,6 +46,8 @@ import co.cheez.cheez.util.ViewAnimateUtil;
  */
 public class ProfileFragment extends BaseFragment
         implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+
+    public static final int INTENT_EDIT_PROFILE = 51;
 
     @DeclareView(id = R.id.tv_toolbar_username)
     private TextView mUsernameLabel;
@@ -76,6 +81,9 @@ public class ProfileFragment extends BaseFragment
 
     @DeclareView(id = R.id.tv_followee_count)
     private TextView mFolloweeCountLabel;
+
+    @DeclareView(id = R.id.tv_state_message)
+    private TextView mStateMessageLabel;
 
 
     private ContentRecyclerViewAdapter mPostListAdapter;
@@ -136,6 +144,8 @@ public class ProfileFragment extends BaseFragment
 
         ImageDisplayUtil.displayImage(user.getDisplayImageUrl(), mProfileImageView);
         mUsernameLabel.setText(user.getDisplayName());
+        mStateMessageLabel.setText(user.getStateMessage());
+
         mCheezCountLabel.setText(
                 String.format(getString(R.string.cheez_count), mUser.getUploadCount()));
         mFolloweeCountLabel.setText(
@@ -252,6 +262,17 @@ public class ProfileFragment extends BaseFragment
                 });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case INTENT_EDIT_PROFILE:
+                    setUser(Auth.getInstance().getUser());
+                    break;
+            }
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -260,7 +281,8 @@ public class ProfileFragment extends BaseFragment
                 getActivity().finish();
                 break;
             case R.id.btn_edit_profile:
-
+                Intent intent = ProfileEditActivity.getIntent(getActivity());
+                startActivityForResult(intent, INTENT_EDIT_PROFILE);
                 break;
         }
     }
@@ -315,4 +337,5 @@ public class ProfileFragment extends BaseFragment
             e.printStackTrace();
         }
     }
+
 }
