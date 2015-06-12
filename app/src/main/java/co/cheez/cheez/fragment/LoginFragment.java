@@ -3,7 +3,6 @@ package co.cheez.cheez.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.IntentCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,7 +121,6 @@ public class LoginFragment extends BaseFragment
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         super.onErrorResponse(error);
-                        Log.e("error", error.toString());
                         MessageUtil.showDefaultErrorMessage();
                         ((BaseActivity) getActivity()).hideProgressDialog();
                     }

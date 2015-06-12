@@ -45,6 +45,7 @@ public interface Constants {
         String PUSH_TOKEN = "push_token";
         String DELETE = "delete";
         String STATE_MESSAGE = "state_message";
+        String PROFILE_IMAGE = "profile_image";
     }
 
     interface URLs {
@@ -61,5 +62,6 @@ public interface Constants {
         String NO_IMAGE = "https://d5pd307bf8hwt.cloudfront.net/no_image.png";
         String PUSH_TOKEN = BASE + "push-token/";
         String FOLLOW = BASE + "follow/";
+        String EDIT_PROFILE = BASE + "edit-profile/";
     }
 }

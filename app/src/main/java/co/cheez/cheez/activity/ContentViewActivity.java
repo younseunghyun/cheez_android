@@ -281,7 +281,6 @@ public class ContentViewActivity extends BaseActivity
     public void onEvent(PostReadEvent event) {
         try {
             mReadPostLog.put(event.data.toJsonObject());
-            Log.e("asdf", event.data.toJsonString());
             if (mReadPostLog.length() >= LOG_QUEUE_SIZE) {
                 sendReadPostLog();
             }
